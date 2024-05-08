@@ -1,0 +1,15 @@
+sample_name	group	batch	BAM_file	salmon_quant_file
+CD1A(-)_m1_1	CD1A_N	1	results/003.samtools.sort.out/K3260CD1aN_S0_L001.srt.bam	results/010.salmon.quant.out/K3260CD1aN_S0_L001/quant.sf
+CD1A(-)_m2_1	CD1A_N	2	results/003.samtools.sort.out/K084CD7PCD1N_S1_L001.srt.bam	results/010.salmon.quant.out/K084CD7PCD1N_S1_L001/quant.sf
+CD1A(-)_m3_1	CD1A_N	2	results/003.samtools.sort.out/K086CD7PCD1N_S3_L001.srt.bam	results/010.salmon.quant.out/K086CD7PCD1N_S3_L001/quant.sf
+CD1A(-)_m3_2	CD1A_N	3	results/003.samtools.sort.out/K086CD7PCD1N_S0_L001.srt.bam	results/010.salmon.quant.out/K086CD7PCD1N_S0_L001/quant.sf
+CD1A(+)_m1_1	CD1A_P	1	results/003.samtools.sort.out/K3260CD1aP_S0_L001.srt.bam	results/010.salmon.quant.out/K3260CD1aP_S0_L001/quant.sf
+CD1A(+)_m2_1	CD1A_P	2	results/003.samtools.sort.out/K084CD7PCD1P_S17_L001.srt.bam	results/010.salmon.quant.out/K084CD7PCD1P_S17_L001/quant.sf
+CD1A(+)_m3_1	CD1A_P	2	results/003.samtools.sort.out/K086CD7PCD1P_S5_L001.srt.bam	results/010.salmon.quant.out/K086CD7PCD1P_S5_L001/quant.sf
+CD1A(+)_m3_2	CD1A_P	3	results/003.samtools.sort.out/K086CD7PCD1P_S28_L003.srt.bam	results/010.salmon.quant.out/K086CD7PCD1P_S28_L003/quant.sf
+CD1A(-)_m4_1	CD1A_N	4	results/003.samtools.sort.out/K5006_CD1AN_S0_L001.srt.bam	results/010.salmon.quant.out/K5006_CD1AN_S0_L001/quant.sf
+CD1A(-)_m5_1	CD1A_N	4	results/003.samtools.sort.out/K5010_CD1AN_S0_L001.srt.bam	results/010.salmon.quant.out/K5010_CD1AN_S0_L001/quant.sf
+CD1A(-)_m6_1	CD1A_N	4	results/003.samtools.sort.out/K5019_CD1AN_S0_L001.srt.bam	results/010.salmon.quant.out/K5019_CD1AN_S0_L001/quant.sf
+CD1A(+)_m4_1	CD1A_P	4	results/003.samtools.sort.out/K5006_CD1AP_S0_L001.srt.bam	results/010.salmon.quant.out/K5006_CD1AP_S0_L001/quant.sf
+CD1A(+)_m5_1	CD1A_P	4	results/003.samtools.sort.out/K5010_CD1AP_S0_L001.srt.bam	results/010.salmon.quant.out/K5010_CD1AP_S0_L001/quant.sf
+CD1A(+)_m6_1	CD1A_P	4	results/003.samtools.sort.out/K5019_CD1AP_S0_L001.srt.bam	results/010.salmon.quant.out/K5019_CD1AP_S0_L001/quant.sf

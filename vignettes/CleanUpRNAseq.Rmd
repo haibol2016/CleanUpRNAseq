@@ -1,0 +1,307 @@
+---
+title: "CleanUpRNAseq: detecting and correcting for gDNA contamination in RNA-seq data"
+author:
+- name: Haibo Liu
+  affiliation: MCCB, UMass Chan Medical School, Worcester, USA
+- name: Kai Hu
+  affiliation: MCCB, UMass Chan Medical School, Worcester, USA
+- name: Kevin O'Connor
+  affiliation: MCCB, UMass Chan Medical School, Worcester, USA
+- name: Michelle Kelliher
+  affiliation: MCCB, UMass Chan Medical School, Worcester, USA
+- name: Lihua Julie Zhu
+  affiliation: MCCB, UMass Chan Medical School, Worcester, USA
+date: "`r Sys.Date()`"
+package: "CleanUpRNAseq"
+output:
+  BiocStyle::html_document:
+    toc_float: true
+    pandoc_args: "--citeproc"
+  BiocStyle::pdf_document: default
+link-citations: yes
+bibliography: bibliography.bib
+abstract: |
+  Some RNA-seq data might suffer from genomic DNA (gDNA) contamination due to 
+  carrying over of residual gDNA in RNA preparation into sequencing library. The 
+  R package CleanUpRNAseq provides a set of functionalities to detect and 
+  correct for gDNA contamination, thus facilitate better quantitation of 
+  gene expression and differential expression analysis.
+vignette: |
+  %\VignetteIndexEntry{CleanUpRNAseq: detecting and correcting for DNA contamination in RNA-seq data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r setup, include = FALSE}
+options(timeout=Inf)
+knitr::opts_chunk$set(message = FALSE, 
+                      warning = FALSE,
+          					  tidy = FALSE,
+          					  fig.align = "left")
+```
+
+# Introduction
+RNA-seq has become a state-of-art technology for studying gene expression [@Wang2009]. 
+However, due to improper RNA preparation and choice of some library preparation 
+protocols, such as rRNA-depletion based RNA-seq protocol [@ONeil2013] and the [SMART-Seq](https://www.takarabio.com/products/next-generation-sequencing/rna-seq/ultra-low-input-rna-seq) protocol, RNA-seq data might suffer from genomic DNA (gDNA) contamination, which skews quantitation of gene expression and hinders differential gene expression analysis [@Li2022;@Verwilt2020;@Markou2021]. Some quality control tools have been  developed to check the quality of RNA-seq data at the raw read and post-alignment levels, including [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/),
+RSeQC [@Wang2012], Qualimap [@GarcaAlcalde2012], RNA-SeQC/RNA-SeQC 2 [@DeLuca2012;@Graubert2021], QoRTs [@Hartley2015], RNA-QC-Chain [@Zhou2018], and [RNAseqQC](https://cran.r-project.org/web/packages/RNAseqQC/index.html). Those post-alignment tools can report percentages of reads mapping to different genomic features, such as genes, exons, introns, intergenic regions, and rRNA exons. Thus, they can be used to roughly detect gDNA contamination. So far, [SeqMonk](https://www.bioinformatics.babraham.ac.uk/projects/seqmonk/) and the gDNAx
+package are the only tool which can be used to both detect and correct for gDNA contamination in RNA-seq data. However, SeqMonk is a Java-based GUI tool which makes it not available in most high performance computing cluster. More importantly,
+seqMonk assumes a uniform distribution of reads derived from gDNA contamination and its performance on correcting for gDNA contamination in RNA-seq data is not fully evaluated and peer reviewed. On the other hand, gDNAx is an R/Bioconductor package
+and can be incorporated into automated RNA-seq data analysis pipeline easily. However, gDNAx only simply removes reads mapping to intergenic regions and introns, but not those mapping to exons, to mitigate gDNA contamination. Thus, gDNAx's algorithm for correcting for gDNA contamination is not sophisticated.To this end, we developed the R pacakge `r Biocpkg("CleanUpRNAseq")`, which provides a full set of functions for detecting and correcting for gDNA contamination in RNA-seq data across all computing platforms.
+
+
+# Setting up
+As for any other sequencing data analysis, users should first check the quality 
+of raw RNA-seq sequencing data using a tool like [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) followed by
+MultiQC [@Ewels2016]. Depending on the quality of the raw data, trimming low
+quality bases and/or adpator sequences might be necessary to increase mapping
+quality and rate. Subsequently, reads are mapped to the reference genome of 
+interest using tools, such as STAR [@Dobin2012], HISAT2 [@Kim2019], GMAP [@Wu2016],
+and Subread [@Liao2013]. The resulting alignment files in the BAM format are used 
+for post-alignment quality control, including detection of gDNA contamination. 
+Meanwhile, if the RNA-seq library is *unstranded*, reads are mapped to the 
+reference transcriptome using Salmon [@Patro2017] to get transcript-level abundance,
+counts, and effective lengths, since Salmon can resolve reads mapped to multiple 
+transcripts, which are imported into R using the `r Biocpkg("tximport")` to get
+gene-level counts, abundance and length information. However, if the library 
+is *stranded*, reads are mapped to the reference transcriptome using Salmon twice: 
+one using the designed strandedness for the '--libType' option, the other 
+using the opposite strandedness. See Salmon library type discussion
+<https://salmon.readthedocs.io/en/latest/library_type.html>. Then gene-level 
+counts, abundance and length information are imported into R as above.
+
+
+# How to run CleanUpRNAseq   
+First, load the required packages, including CleanUpRNAseq. Then users can perform
+a step-by-step analysis of the RNA-seq data as below for more flexibility. For users' convenience, CleanUpRNAseq also offers two wrapper functions, create_diagnostic_plots
+and correct_for_contamination, for detecting and correcting for gDNA contamination
+in RNA-seq data. As for how to use these wrappers, please refer to their function
+documentation.
+
+```{r loadpackage}
+ suppressPackageStartupMessages({
+    library("CleanUpRNAseq")
+    #devtools::load_all("./")
+    library("ggplotify")
+    library("R.utils")
+    library("patchwork")
+  })
+```
+
+## Step 1: Load an EnsDb package or prepare an EnsDb database     
+Users can list all current EnsDb packages from `r Biocpkg("AnnotationHub")` and 
+load the package of choice, if available, as follows. Here, an EnsDb package
+for the human genome is loaded. It is crucial to use an EnsDb pacakge which
+represents the genome annotation file (GTF) used for RNA-seq read alignment.
+
+```{r queryannotationhub}
+## load EnsDb.Hsapiens.v86
+suppressPackageStartupMessages({
+  library("EnsDb.Hsapiens.v86")})
+hs_ensdb_sqlite <- EnsDb.Hsapiens.v86
+```
+
+Otherwise, users can easily prepare an EnsDb database from an Ensembl GTF file.
+For all following steps, this option is adopted because the latest version of
+human transcriptome has been used for read mapping by STAR and Salmon to quantify
+gene expression of the example RNA-seq data.
+
+```{r createensdb}
+ tmp_dir <- tempdir()
+ gtf_url <- paste0("https://ftp.ensembl.org/pub/release-110/gtf/",
+                   "homo_sapiens/Homo_sapiens.GRCh38.110.gtf.gz")
+ gtf <- basename(gtf_url)
+ gtf <- file.path(tmp_dir, gtf)
+ 
+ if (!file.exists(gtf))
+ {
+    download.file(url = gtf_url,
+               destfile = gtf,
+               mode = "wb")
+ }
+
+ hs_ensdb_sqlite <- make_ensdb(gtf = gtf,
+                               outfile = file.path(tmp_dir,
+                                               "EnsDb.hs.v110.sqlite"),
+                               organism_latin_name = "Homo_Sapiens",
+                               genome_version = "GRCh38",
+                               Ensembl_release_version = 110)
+```
+ 
+## Step 2. Prepare SAF (simplified annotation format) files 
+Potential DNA contamination exists if a significantly high portion of RNA-seq 
+reads mapped to intergenic regions. `r Biocpkg("CleanUpRNAseq")` uses the 
+*featureCounts* function from the `r Biocpkg("Rsubread")` package to 
+quantify the percentage of reads mapped to different genomic features: genes,
+exons, introns, intergenic regions, rRNA exons, and organelle genome(s). So 
+users need to prepare SAF files for these genomic features. In addition, 
+a BAM file is needed to provide the lengths of the chromosomes/scaffolds.
+
+```{r preparesaf}
+bam_file <- system.file("extdata","K084CD7PCD1N.srt.bam",
+                         package = "CleanUpRNAseq")
+saf_list <- get_feature_saf(ensdb_sqlite = hs_ensdb_sqlite,
+                             bamfile = bam_file,
+                             mitochondrial_genome = "MT")
+```
+## Step 3. Summarize reads mapped to different genomic features  
+Reads mapped to different genomic features is summarized by using the
+*featureCounts* function with the SAF files generated above as annotation.
+`r Biocpkg("CleanUpRNAseq")` also quantifies the reads spanning exon-exon 
+junctions and the reads mapped to exons of each gene using the GTF file as 
+annotation. The junction read count table is used to determine the unexpressed, 
+multiexonic genes, while the gene-level read count table is used for comparing
+samples at the gene level. Here two downsampled BAM files are used for speeding
+up the demonstration, while a precomputed R object in the .RData format is 
+used for actual downstream analysis. 
+
+```{r featurecount}
+ bams <- system.file("extdata",
+                    c("K084CD7PCD1N.srt.bam", "K084CD7PCD1P.srt.bam"), 
+                    package = "CleanUpRNAseq")
+
+ metadata <- data.frame(sample_name = c("CD1AN_m2_1", "CD1AP_m2_1"),
+                        BAM_file = bams,
+                        group = c("CD1AN", "CD1AP"))
+ gunzip(gtf, remove = FALSE, overwrite = TRUE)
+
+ invisible({capture.output({counts_list <- summarize_reads(metadata = metadata,
+                                isPaired = TRUE,
+                                strandSpecific = 0,
+                                saf_list = saf_list,
+                                gtf = gsub(".gz", "", gtf),
+                                threads = 1,
+                                verbose = FALSE)})})
+
+```
+
+## Step 4. Check DNA contamination  
+A precomputed R object in the .RData format (*read_count_summary.RData*) 
+containing the *featureCounts* output for a full RNA-seq dataset of 8 samples
+from two treatment groups is downloaded from Dropbox. 
+
+```{r mappingstat, fig.height = 6, fig.width = 6, fig.cap = "Read mapping status"}
+## download feaureCounts results
+count_url <- paste0("https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
+            "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1")
+download.file(url= count_url,
+              destfile = file.path(tmp_dir, "read_count_summary.RData"),
+              mode = "wb")
+load(file.path(tmp_dir, "read_count_summary.RData"))
+
+
+p_assignment_stat <- 
+      check_read_assignment_stat(assignment_stat = counts_summary$gtf$stat)
+wrap_plots(p_assignment_stat)
+```
+
+```{r readdistr, fig.height = 4, fig.width = 5, fig.cap = "Read distribution over different genomic features"}
+metadata <- counts_summary$metadata
+counts_summary$metadata <- NULL
+p_read_distr <- check_read_distribution(featurecounts_list = counts_summary,
+                                        metadata = metadata)
+print(p_read_distr$p)
+```
+
+```{r loadsalmon}
+quant_files <- system.file("extdata",
+                           c("K084CD7PCD1N.quant.sf", "K084CD7PCD1P.quant.sf"),
+                           package = "CleanUpRNAseq")
+
+metadata_toy <- data.frame(sample_name = c("CD1AN_m2_1", "CD1AP_m2_1"),
+                       salmon_quant_file = quant_files,
+                       group = c("CD1AN", "CD1AP"))
+
+salmon_counts <- salmon_res(metadata = metadata_toy,
+                            ensdb_sqlite = hs_ensdb_sqlite)
+
+## download the full Salmon quantification data
+
+salmon_url <-
+  "https://drive.google.com/uc?export=download&id=13vsobXnENoiYOBo-Vf_e_00xbR8ekc4Z"
+destfile <- file.path(tmp_dir, "salmon_quant_summary.RData")
+download.file(url= salmon_url,
+               destfile = destfile,
+               mode = "wb")
+
+ ## load the salmon_quant object
+load(destfile)
+```
+
+```{r samplecorr, fig.height = 8, fig.width = 8, fig.cap = "Smoothed scatter plot showing pairwise sample correlation"}
+check_sample_correlation(counts = salmon_quant$counts)
+```
+
+```{r exprdistr, fig.height = 8, fig.width = 6, fig.cap = "Expression distribution"}
+metadata$group <- gsub("CD1A\\(-\\)", "CD1AN", metadata$group)
+metadata$group <- gsub("CD1A\\(\\+\\)", "CD1AP", metadata$group)
+p_expr_distr <- check_expr_distribution(counts = salmon_quant$counts,
+                                        metadata = metadata)
+wrap_plots(p_expr_distr, ncol = 1, nrow = 3)
+```
+
+
+```{r exprgene, fig.height = 3, fig.width = 3.5, out.width = "80%", fig.cap = "Percent of expressed genes"}
+p_expr_genes <- 
+  check_expressed_gene_percentage(metadata = metadata,
+                                  counts = salmon_quant$counts,
+                                  min_cpm = 1,
+                                  abundance = salmon_quant$abundance,
+                                  min_tpm = 1)
+print(p_expr_genes)
+```
+
+```{r samplesimilarity, fig.height = 5, fig.width = 10, fig.cap = "PCA score plot and heatmap showing sample similarity"}
+## DESeq2 exploratory analysis before correction
+pca_heatmap <- exploratory_analysis(counts = salmon_quant$counts,
+                                    metadata = metadata)
+pca_heatmap$pca + as.ggplot(pca_heatmap$heatmap)
+```
+
+## Step 5. Correct for DNA contamination
+If the libraries are unstranded, `r Biocpkg("CleanUpRNAseq")` uses a median 
+per-base read coverage (median_PBRC) over non-zero count intergenic
+regions to estimate per-base DNA contamination over exons of each gene of each 
+sample, and corrects for gene-level DNA contamination by subtracting median_PBRC * 
+average_gene_length from the Salmon count table of each gene of each sample. 
+```{r correctcontamination}
+corrected_counts <- global_correction(intergenic_featureCounts_res =
+                                        counts_summary$intergenic_region,
+                                      salmon_res = salmon_quant)
+```
+However, if the libraries are stranded, `r Biocpkg("CleanUpRNAseq")` considered 
+as gene-level contamination the count table resulted from quantitation using the
+opposite strandedness setting. By subtracting the DNA contamination of each gene 
+in each sample from the count table resulted from quantitation using the actual 
+strandedness setting, users can get contamination corrected count table. To this
+end, use the `correct_stranded_lib` function.
+
+
+## Step 6. Check correction effect
+After correcting for DNA contamination, we expect to see more comparable gene 
+expression across samples.  
+
+Smoothed scatter plots show correlation of gene expression between each pair 
+of samples.  
+
+```{r samplecorr2, fig.height = 6, fig.width = 6, fig.cap = "Smoothed scatter plot showing pairwise sample correlation after correction"}
+check_sample_correlation(counts = corrected_counts)
+```
+
+Boxplots, density plots and empirical cumulative distribution after correction
+revealed gene expression across samples are more comparable.
+
+```{r exprdistr2, fig.height = 8, fig.width = 6, fig.cap = "Expression distribution after correction"}
+
+metadata$group <- gsub("CD1A\\(-\\)", "CD1AN", metadata$group)
+metadata$group <- gsub("CD1A\\(\\+\\)", "CD1AP", metadata$group)
+p_expr_distr <- check_expr_distribution(counts = corrected_counts,
+                                        metadata = metadata)
+wrap_plots(p_expr_distr, ncol = 1, nrow = 3)
+```
+
+# Session info
+Here is the output of `sessionInfo()` on the system on which this document was 
+compiled running pandoc `r rmarkdown::pandoc_version()`:
+```{r sessionInfo, echo = FALSE}
+sessionInfo()
+```
