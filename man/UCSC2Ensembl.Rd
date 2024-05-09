@@ -7,8 +7,8 @@
 UCSC2Ensembl(
   UCSC_BSgenome = NULL,
   genome_version = "GRCh38",
-  seqname_alias = data.frame(ucsc = paste0("chr", c(1:22, "X", "Y", "M")), ensembl =
-    c(1:22, "X", "Y", "MT"))
+  seqname_alias = data.frame(ucsc = paste0("chr", c(seq_len(22), "X", "Y", "M")), ensembl
+    = c(seq_len(22), "X", "Y", "MT"))
 )
 }
 \arguments{
@@ -20,8 +20,8 @@ style, such as BSgenome.Hsapiens.UCSC.hg38.}
 for the \code{\link[=make_ensdb]{make_ensdb()}}.}
 
 \item{seqname_alias}{A data frame or a tab-delimited file to a data frame,
-with two columns: ucsc and ensembl for UCSC-style seqnames and Ensembl-style
-seqnames, respectively.}
+with two columns: ucsc and ensembl for UCSC-style seqnames and Ensembl-
+style seqnames, respectively.}
 }
 \value{
 An object of the \link[BSgenome:BSgenome-class]{BSgenome::BSgenome} in the Ensembl style,
@@ -35,32 +35,40 @@ version name form the UCSC name to the Ensembl name, such as from "hg38" to
 "GRCh38".
 }
 \examples{
-
 library("BSgenome.Hsapiens.UCSC.hg38")
 ucsc_BSgenome <- BSgenome.Hsapiens.UCSC.hg38
 ucsc_seqnames <-
-     seqnames(ucsc_BSgenome)[!grepl("_alt|fix|hap\\\\d+", seqnames(ucsc_BSgenome))]
+    seqnames(ucsc_BSgenome)[!grepl("_alt|fix|hap\\\\d+",
+                            seqnames(ucsc_BSgenome))]
 
-## Wierd: BSgenome.Hsapiens.UCSC.hg19 has both chrM and chrMT for mitochondrial
-## genome. renomve chrMT.
+## Wierd: BSgenome.Hsapiens.UCSC.hg19 has both chrM and chrMT for
+## mitochondrial genome. renomve chrMT.
 
-if (all(c("chrM", "chrMT") \%in\% ucsc_seqnames))
-{
-   ucsc_seqnames <- ucsc_seqnames[!ucsc_seqnames \%in\% "chrMT"]
+if (all(c("chrM", "chrMT") \%in\% ucsc_seqnames)) {
+    ucsc_seqnames <- ucsc_seqnames[!ucsc_seqnames \%in\% "chrMT"]
 }
 
-ensembl_seqnames <- gsub("^chr", "",
-                    gsub("chrM$", "MT",
-                    gsub("v", ".",
-                    gsub("_random|chr[^_]+_", "", ucsc_seqnames))))
- ## for BSgenome.Hsapiens.UCSC.hg19, scaffold seqnames start with lower case,
- ## should be changed to upper case. For example, change "gl000231" to
- ## "GL000231". Add a suffix ".1" to these scaffold seqnames.
+ensembl_seqnames <- gsub(
+    "^chr", "",
+    gsub(
+        "chrM$", "MT",
+        gsub(
+            "v", ".",
+            gsub("_random|chr[^_]+_", "", ucsc_seqnames)
+        )
+    )
+)
+## for BSgenome.Hsapiens.UCSC.hg19, scaffold seqnames start with lower case,
+## should be changed to upper case. For example, change "gl000231" to
+## "GL000231". Add a suffix ".1" to these scaffold seqnames.
 
-seqname_alias <- data.frame(ucsc = ucsc_seqnames, ensembl = ensembl_seqnames)
+seqname_alias <- data.frame(ucsc = ucsc_seqnames,
+                            ensembl = ensembl_seqnames)
 
-bsgenome <- UCSC2Ensembl(UCSC_BSgenome = ucsc_BSgenome,
-                         genome_version = "GRCh38",
-                         seqname_alias = seqname_alias)
+bsgenome <- UCSC2Ensembl(
+    UCSC_BSgenome = ucsc_BSgenome,
+    genome_version = "GRCh38",
+    seqname_alias = seqname_alias
+)
 
 }

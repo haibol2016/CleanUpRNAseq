@@ -20,24 +20,26 @@ sample_name, and group. The \emph{salmon_quant_file} column contains the full
 paths to \emph{quant.sf} files for quantitation of gene expression by Salmon
 pseudo-alignment. See \url{https://salmon.readthedocs.io/en/latest/}. The
 \emph{sample_name} and \emph{group} columns contain the unique sample labels, and
-the experimental conditions for each sample. The order of the three columns
-doesn't matter.}
+the experimental conditions for each sample. The order of the three
+columns doesn't matter.}
 
-\item{ensdb_sqlite}{A character(1) vector, a path to an SQLite database for
-an object of the \link[ensembldb:EnsDb-class]{ensembldb::EnsDb}.}
+\item{ensdb_sqlite}{An object of the \link[ensembldb:EnsDb-class]{ensembldb::EnsDb} or a
+character(1) vector, specifying a path to an SQLite database for an
+object of the \link[ensembldb:EnsDb-class]{ensembldb::EnsDb}.}
 
 \item{filtered_gene_biotypes}{A character(n) vector,specifying the biotypes
 of genes which will not be considered for downstream gene expression
 analysis. By default, genes of the following biotypes are excluded:
 "artifact","TEC","miRNA","tRNA", "misc_RNA", "Mt_rRNA", "Mt_tRNA", "rRNA",
-"rRNA_pseudogene", "scaRNA", "scRNA", "snoRNA", "snRNA", "sRNA", "vault_RNA",
-"TR_V_pseudogene", "IG_C_pseudogene", "IG_J_pseudogene", "IG_V_pseudogene",
-"IG_pseudogene", "TR_J_pseudogene", "TR_V_pseudogene", because their
-transcripts are too short (< 200 nt) or not likely expressed at all.}
+"rRNA_pseudogene", "scaRNA", "scRNA", "snoRNA", "snRNA", "sRNA",
+"vault_RNA", "TR_V_pseudogene", "IG_C_pseudogene", "IG_J_pseudogene",
+"IG_V_pseudogene", "IG_pseudogene", "TR_J_pseudogene", "TR_V_pseudogene",
+because their transcripts are too short (< 200 nt) or not likely expressed
+at all.}
 }
 \value{
-A list of of matrices of gene-level abundance, counts, and length. See
-\code{\link[tximport:tximport]{tximport::tximport()}}.
+A list of of matrices of gene-level abundance, counts, and length.
+See \code{\link[tximport:tximport]{tximport::tximport()}}.
 \describe{
 \item{abundance}{A numeric matrix containing abundance (TPM) for each gene
 of each sample}
@@ -51,29 +53,38 @@ each sample}
 Import Salmon quantification output into R using tximport
 }
 \examples{
-\dontrun{
 options(timeout = max(3000, getOption("timeout")))
 ## using trucated quant.sf files for demonstration purpose
 quant_files <- system.file("extdata",
-                          c("K084CD7PCD1N.quant.sf", "K084CD7PCD1P.quant.sf"),
-                          package = "CleanUpRNAseq")
+    "K084CD7PCD1N.quant.sf",
+    package = "CleanUpRNAseq"
+)
 
-metadata <- data.frame(sample_name = c("CD1AN_m2_1", "CD1AP_m2_1"),
-                       salmon_quant_file = quant_files,
-                       group = c("CD1AN", "CD1AP"))
+metadata <- data.frame(
+    sample_name = "CD1AN_m2_1",
+    salmon_quant_file = quant_files,
+    group = "CD1AN"
+)
 
 # download the EnsDb SQLite database: GRCh38.V110.ensdb.sqlite.zip
 tmp_dir <- tempdir()
-ensdb_url <- paste0("https://www.dropbox.com/scl/fi/5i8mwuxe7mcbxz4qvf43g/",
-     "GRCh38.V110.ensdb.sqlite.zip?rlkey=udcpv8yafbdujvom628u6aucb&dl=1")
-download.file(url= ensdb_url,
-              destfile = file.path(tmp_dir, "GRCh38.V110.ensdb.sqlite.zip"),
-              mode = "wb")
+ensdb_url <- paste0(
+    "https://www.dropbox.com/scl/fi/5i8mwuxe7mcbxz4qvf43g/",
+    "GRCh38.V110.ensdb.sqlite.zip?rlkey=udcpv8yafbdujvom628u6aucb&dl=1"
+)
+download.file(
+    url = ensdb_url,
+    destfile = file.path(tmp_dir, "GRCh38.V110.ensdb.sqlite.zip"),
+    mode = "wb"
+)
 unzip(file.path(tmp_dir, "GRCh38.V110.ensdb.sqlite.zip"),
-     exdir = tmp_dir)
+    exdir = tmp_dir
+)
 hs_ensdb_sqlite <- file.path(tmp_dir, "GRCh38.V110.ensdb.sqlite")
 
-salmon_counts <- salmon_res(metadata = metadata,
-                            ensdb_sqlite = hs_ensdb_sqlite)
-}
+salmon_counts <- salmon_res(
+    metadata = metadata,
+    ensdb_sqlite = hs_ensdb_sqlite
+)
+
 }

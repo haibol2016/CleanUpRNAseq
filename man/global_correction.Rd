@@ -14,16 +14,16 @@ global_correction(
 \item{intergenic_featureCounts_res}{A sublist of the function
 summarize_reads, containing read summary for intergenic regions.}
 
-\item{salmon_res}{A list of matrices containing gene-level abundances, counts,
-lengths. See \code{\link[tximport:tximport]{tximport::tximport()}}.}
+\item{salmon_res}{A list of matrices containing gene-level abundances,
+counts, lengths. See \code{\link[tximport:tximport]{tximport::tximport()}}.}
 
 \item{lambda}{A positive number specifying how many times of the median read
 coverage of non-zero count intergenic regions used as an estimate of DNA
 contamination. The default of \emph{lambda} is 1,but it could be adjusted based
-on the gene-level count distributions of the resulting corrected count table
-outputted by the \code{\link[=check_read_distribution]{check_read_distribution()}} function. A value between 1
-and 3 can be tried. Ideally the distributions of all samples from a given
-condition should be very similar.}
+on the gene-level count distributions of the resulting corrected count
+table output by the \code{\link[=check_read_distribution]{check_read_distribution()}} function. A value between
+1 and 3 can be tried. Ideally the distributions of all samples from a
+given condition should be very similar.}
 }
 \value{
 A matrix containing an RNA-seq count table corrected for DNA
@@ -34,31 +34,38 @@ Correct for DNA contamination in RNA-seq data using the 2.5 times of median
 counts per base of intergenic regions with at least one count.
 }
 \examples{
-\dontrun{
 tmp_dir <- tempdir()
 options(timeout = max(3000, getOption("timeout")))
 ## download feaureCounts results
-count_url <- paste0("https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-           "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1")
-download.file(url= count_url,
-              destfile = file.path(tmp_dir, "read_count_summary.RData"),
-              mode = "wb")
+count_url <- paste0(
+    "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
+    "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+)
+download.file(
+    url = count_url,
+    destfile = file.path(tmp_dir, "read_count_summary.RData"),
+    mode = "wb"
+)
 load(file.path(tmp_dir, "read_count_summary.RData"))
 
 # download the Salmon quantification results
-salmon_url <- paste0("https://drive.google.com/",
-                   "uc?export=download&id=13vsobXnENoiYOBo-Vf_e_00xbR8ekc4Z")
+salmon_url <- paste0(
+    "https://drive.google.com/",
+    "uc?export=download&id=13vsobXnENoiYOBo-Vf_e_00xbR8ekc4Z"
+)
 destfile <- file.path(tmp_dir, "salmon_quant_summary.RData")
-download.file(url= salmon_url,
-              destfile = destfile,
-              mode = "wb")
+download.file(
+    url = salmon_url,
+    destfile = destfile,
+    mode = "wb"
+)
 
 ## load the salmon_quant object
 load(destfile)
 
-corrected_counts <- global_correction(intergenic_featureCounts_res =
-                                       counts_summary$intergenic_region,
-                                      salmon_res = salmon_quant)
-
-}
+corrected_counts <- global_correction(
+    intergenic_featureCounts_res =
+        counts_summary$intergenic_region,
+    salmon_res = salmon_quant
+)
 }

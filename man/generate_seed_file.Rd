@@ -33,8 +33,7 @@ of the reference genome, such as "Human".}
 be created for building a BSgenome package.}
 
 \item{fasta_url}{A character(1), specifying the URL from where the reference
-genome fasta file is downloaded, such as
-"https://ftp.ensembl.org/pub/release-111/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz"}
+genome fasta file is downloaded.}
 
 \item{release_date}{A character(1), specifying the genome assembly release
 date, such as "August 2020".}
@@ -55,22 +54,29 @@ Prepare a seed file for building a BSgenome package
 out_dir <- tempdir()
 genome_fasta <- file.path(out_dir, "toy.example.fa")
 in_fasta <- file(genome_fasta, open = "w")
-writeLines(">chr1\nATCGCTGCGGATGCGG\n>chr2\nCCCCCCCCCCCGGGGATAAAA\n",
-          in_fasta)
+writeLines(c(">chr1\nATCGCTGCGGATGCGG",
+             ">chr2\nCCCCCCCCCCCGGAAA",
+             ">chrM\nATACTACTGGA"), in_fasta)
 close(in_fasta)
 
-fa_dir <- generate_multifasta(genome_fasta = genome_fasta,
-                              out_dir = out_dir,
-                              prefix = "none")
+fa_dir <- generate_multifasta(
+    genome_fasta = genome_fasta,
+    out_dir = out_dir,
+    prefix = "none"
+)
 
-seed_file <- generate_seed_file(multifasta_path = fa_dir,
-                                latin_name = "Homo sapiens",
-                                common_name = "Human",
-                                genome_version = "GRCh38",
-                                seed_file_name = file.path(out_dir,
-                                                    "human.genome.seed.txt"),
-                                fasta_url = "http://ftp.ensembl.org/xxx.fa",
-                                release_date = "August 2007",
-                                source = "Ensembl",
-                                version = "1.0.0")
+seed_file <- generate_seed_file(
+    multifasta_path = fa_dir,
+    latin_name = "Homo sapiens",
+    common_name = "Human",
+    genome_version = "GRCh38",
+    seed_file_name = file.path(
+        out_dir,
+        "human.genome.seed.txt"
+    ),
+    fasta_url = "http://ftp.ensembl.org/xxx.fa",
+    release_date = "August 2007",
+    source = "Ensembl",
+    version = "1.0.0"
+)
 }

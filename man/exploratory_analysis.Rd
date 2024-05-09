@@ -35,24 +35,27 @@ showing sample distances and PCA plot showing sample variations. Internally,
 DESeq2 is used for vst transformation of count data.
 }
 \examples{
-\dontrun{
 library(patchwork)
 options(timeout = max(3000, getOption("timeout")))
 tmp_dir <- tempdir()
 ## download feaureCounts results
-count_url <- paste0("https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-           "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1")
-download.file(url= count_url,
-              destfile = file.path(tmp_dir, "read_count_summary.RData"),
-              mode = "wb")
+count_url <- paste0(
+    "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
+    "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+)
+download.file(
+    url = count_url,
+    destfile = file.path(tmp_dir, "read_count_summary.RData"),
+    mode = "wb"
+)
 load(file.path(tmp_dir, "read_count_summary.RData"))
 
 metadata <- counts_summary$metadata
 metadata$group <- gsub("CD1A\\\\(-\\\\)", "CD1AN", metadata$group)
 metadata$group <- gsub("CD1A\\\\(\\\\+\\\\)", "CD1AP", metadata$group)
-p <- exploratory_analysis(counts = counts_summary$gtf$counts,
-                          metadata = metadata)
-p$heatmap <- as.ggplot(p$heatmap)
-wrap_plots(p, nrow = 2, ncol = 1, widths =5, heights = 9)
-}
+p <- exploratory_analysis(
+    counts = counts_summary$gtf$counts,
+    metadata = metadata
+)
+
 }

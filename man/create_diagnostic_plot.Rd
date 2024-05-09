@@ -34,14 +34,15 @@ create_diagnostic_plot(
 \arguments{
 \item{gtf}{A character(1), a path to an Ensembl GTF file.}
 
-\item{metadata}{A data frame or a path to a tab-delimited file, with column
-names: sample_name, group, BAM_file, and salmon_quant_file. The \emph{sample_name}
-and \emph{group} columns contain the unique sample labels and the experimental
-conditions for each sample, respectively. The \emph{BAM_file} column contains
-the full paths to BAM files. The \emph{salmon_quant_file} column contains the
-full paths to \emph{quant.sf} files for quantitation of gene expression by Salmon
-pseudo-alignment. See \url{https://salmon.readthedocs.io/en/latest/}.The order
-of the columns doesn't matter.}
+\item{metadata}{A data frame  with column
+names: sample_name, group, BAM_file, and salmon_quant_file. The
+\emph{sample_name} and \emph{group} columns contain the unique sample labels and
+the experimental conditions for each sample, respectively. The \emph{BAM_file}
+column contains the full paths to BAM files. The \emph{salmon_quant_file}
+column contains the full paths to \emph{quant.sf} files for quantitation of
+gene expression by Salmon pseudo-alignment.
+See \url{https://salmon.readthedocs.io/en/latest/}.The order of the columns
+doesn't matter.}
 
 \item{normalization}{A character(1) vector, specifying a between-sample
 normalization methods: DESeq2's  median of ratios method, smooth quantile
@@ -76,17 +77,18 @@ for plants.}
 \item{out_dir}{A character(1), specifying an output directory for diagnostic
 plots and the related R objects. If it does not exist, it will be created.}
 
-\item{threads}{An integer(1), number of threads for \code{\link[Rsubread:featureCounts]{Rsubread::featureCounts()}}
-calling.}
+\item{threads}{An integer(1), number of threads for
+\code{\link[Rsubread:featureCounts]{Rsubread::featureCounts()}} calling.}
 
 \item{isPairedEnd}{A logical(1), indicating whether the sequencing data is
 paired-end or not.}
 
-\item{strandSpecific}{An integer(1), specifying the strandedness of the RNA-seq
-libraries. The possible options are 0 (unstranded), 1 (stranded, read 1 or
-single-end read comes from the forward/sense strand) and 2
-(reversely stranded, read 1 or single-end read comes from the reverse/antisense
-strand).See \url{https://salmon.readthedocs.io/en/latest/library_type.html} and
+\item{strandSpecific}{An integer(1), specifying the strandedness of the
+RNA-seq libraries. The possible options are 0 (unstranded), 1 (stranded,
+read 1 or single-end read comes from the forward/sense strand) and 2
+(reversely stranded, read 1 or single-end read comes from the
+reverse/antisense strand).
+See \url{https://salmon.readthedocs.io/en/latest/library_type.html} and
 \url{https://chipster.csc.fi/manual/library-type-summary.html} for more details
 about types of stranded libraries.}
 
@@ -101,8 +103,8 @@ overlaps with multiple features (or meta-features).}
 reads/fragments should be counted, TRUE by default. ‘NH’ tag is used to
 located multi-mapping reads in the input BAM/SAM files.}
 
-\item{fraction}{A logical(1) indicating if fractional counts are produced for
-multi-mapping reads and/or multi-overlapping reads. TRUE by default.}
+\item{fraction}{A logical(1) indicating if fractional counts are produced
+for multi-mapping reads and/or multi-overlapping reads. TRUE by default.}
 
 \item{minMQS}{An integer(1), giving the minimum mapping quality score a read
 must satisfy in order to be counted. For paired-end reads, at least one end
@@ -116,10 +118,11 @@ chromosomes/contigs between reads and annotation.}
 of genes which will not be considered for downstream gene expression
 analysis. By default, genes of the following biotypes are excluded:
 "artifact","TEC","miRNA","tRNA", "misc_RNA", "Mt_rRNA", "Mt_tRNA", "rRNA",
-"rRNA_pseudogene", "scaRNA", "scRNA", "snoRNA", "snRNA", "sRNA", "vault_RNA",
-"TR_V_pseudogene", "IG_C_pseudogene", "IG_J_pseudogene", "IG_V_pseudogene",
-"IG_pseudogene", "TR_J_pseudogene", "TR_V_pseudogene", because their
-transcripts are too short (< 200 nt) or not likely expressed at all.}
+"rRNA_pseudogene", "scaRNA", "scRNA", "snoRNA", "snRNA", "sRNA",
+"vault_RNA","TR_V_pseudogene", "IG_C_pseudogene", "IG_J_pseudogene",
+"IG_V_pseudogene", "IG_pseudogene", "TR_J_pseudogene", "TR_V_pseudogene",
+because their transcripts are too short (< 200 nt) or not likely expressed
+at all.}
 }
 \value{
 A list containing the ggplot objects for generating the diagnostic
@@ -130,12 +133,12 @@ read assignment statistics by featureCounts}
 \item{p2_mapping_rate_by_features}{A ggplot object of dot plots showing the
 percentages of reads mapping to different genomic features: Genes,
 Exons, Introns, Intergenic regions, rRNA exons, organelle genome(s)}
-\item{p4_boxplot}{A ggplot object of boxplot showing normalized gene expression
-distributions}
+\item{p4_boxplot}{A ggplot object of boxplot showing normalized gene
+expression distributions}
 \item{p4_density_plot}{A ggplot object of density plots showing normalized
 gene expression distributions}
-\item{p4_ecd_plot}{A ggplot object of empirical cumulative distribution plots
-showing normalized gene expression distributions}
+\item{p4_ecd_plot}{A ggplot object of empirical cumulative distribution
+plots showing normalized gene expression distributions}
 \item{p5_percent_expressed_genes}{A ggplot object of dot plots showing the
 percentages of genes with observed expression level above a given
 threshold}
@@ -155,38 +158,44 @@ object}
 Generate diagnostic plots for detecting gDNA contamination in RNA-seq data
 }
 \details{
-A set of diagnostic plots will be generated and saved to the specified
-directory. ggplot objects for regenerating these plots as necessary are saved
-to the same directory as "Diagnostic.plots.objects.RDS" along with other R
-objects for correcting for gDNA contamination as a list. In addition, the
-metadata augmented with IR rate (IR\%, percentage of reads mapping to
-intergenic regions) for each sample is saved to the same directory as
-"metadata.with.IR.rates.RDS", which can be used for generalized linear
-model-based differential expression analysis.
+A set of diagnostic plots will be generated and saved to the
+specified directory. ggplot objects for regenerating these plots as
+necessary are saved to the same directory as "Diagnostic.plots.objects.RDS"
+along with other R objects for correcting for gDNA contamination as a list.
+In addition, the metadata augmented with IR rate (IR\%, percentage of reads
+mapping to intergenic regions) for each sample is saved to the same
+directory as "metadata.with.IR.rates.RDS", which can be used for
+generalized linear model-based differential expression analysis.
 }
 \examples{
 \dontrun{
 metadata <- read.delim(system.file("extdata",
-                                    "CD1A.RNAseq.metadata.txt",
-                                     package = "CleanUpRNAseq"))
+    "CD1A.RNAseq.metadata.txt",
+    package = "CleanUpRNAseq"
+))
 options(timeout = max(3000, getOption("timeout")))
-gtf_url <- paste0("https://ftp.ensembl.org/pub/release-110/gtf/",
-                  "homo_sapiens/Homo_sapiens.GRCh38.110.gtf.gz")
+gtf_url <- paste0(
+    "https://ftp.ensembl.org/pub/release-110/gtf/",
+    "homo_sapiens/Homo_sapiens.GRCh38.110.gtf.gz"
+)
 gtf <- basename(gtf_url)
 tmp_dir <- tempdir()
-download.file(url = gtf_url,
-              destfile = file.path(tmp_dir, gtf),
-              mode = "wb")
+download.file(
+    url = gtf_url,
+    destfile = file.path(tmp_dir, gtf),
+    mode = "wb"
+)
 gtf <- file.path(tmp_dir, gtf)
 
 diagnosis_res <-
-create_diagnostic_plot(gtf = gtf,
-                       metadata = metadata,
-                       normalization = "DESeq2",
-                       ensdb_sqlite =
-                           file.path(tmp_dir, "GRCh38.GTF.EnsDb.sqlite"),
-                       out_dir = tmp_dir,
-                       threads = 1)
-
+    create_diagnostic_plot(
+        gtf = gtf,
+        metadata = metadata,
+        normalization = "DESeq2",
+        ensdb_sqlite =
+            file.path(tmp_dir, "GRCh38.GTF.EnsDb.sqlite"),
+        out_dir = tmp_dir,
+        threads = 1
+    )
 }
 }

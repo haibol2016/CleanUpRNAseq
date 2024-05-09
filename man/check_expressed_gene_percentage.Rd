@@ -33,35 +33,41 @@ output.}
 \item{min_tpm}{A numeric(1), minimal TPM threshold.}
 }
 \value{
-A ggplot object if \code{counts} is not \code{NULL}, showing percentages of genes
-with counts above the user-specified minimal CPM (count per million) in
-each sample. Or a ggplot object of two panels if both \code{counts} and \code{abundance}
-are not \code{NULL}, showing percentages of genes  with counts above the
-user-specified minimal CPM and minimal TPM (transcript per million) in each
-sample.
+A ggplot object if \code{counts} is not \code{NULL}, showing percentages of
+genes with counts above the user-specified minimal CPM (count per million)
+in each sample. Or a ggplot object of two panels if both \code{counts} and
+\code{abundance} are not \code{NULL}, showing percentages of genes  with counts
+above the user-specified minimal CPM and minimal TPM (transcript per
+million) in each sample.
+
+A ggplot object.
 }
 \description{
 Check the percentage of genes with counts greater than minimal CPM
 }
 \details{
 The axis title contains unicode, so please output the plot in the svg format
-using the svglite package, instead of \code{\link[grDevices:pdf]{grDevices::pdf()}}, for high-resolution
-plot.
+using the svglite package, instead of \code{\link[grDevices:pdf]{grDevices::pdf()}}, for high-
+resolution plot.
 }
 \examples{
-\dontrun{
 tmp_dir <- tempdir()
 ## download feaureCounts results
-count_url <- paste0("https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-           "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1")
-download.file(url= count_url,
-              destfile = file.path(tmp_dir, "read_count_summary.RData"),
-              mode = "wb")
+count_url <- paste0(
+    "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
+    "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+)
+download.file(
+    url = count_url,
+    destfile = file.path(tmp_dir, "read_count_summary.RData"),
+    mode = "wb"
+)
 load(file.path(tmp_dir, "read_count_summary.RData"))
 
-p <- check_expressed_gene_percentage(metadata = counts_summary$metadata,
-                                     counts = counts_summary$gtf$counts,
-                                     min_cpm = 1)
-print(p)
-}
+p <- check_expressed_gene_percentage(
+    metadata = counts_summary$metadata,
+    counts = counts_summary$gtf$counts,
+    min_cpm = 1
+)
+p
 }

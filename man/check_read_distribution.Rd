@@ -20,10 +20,10 @@ sample names and experimental groups for each sample, respectively.}
 \value{
 A list of two elements.
 \describe{
-\item{p}{A ggplot object, showing percentages of fragments assigned to different
-genomic features, such as genic regions, intergenic regions, exonic regions,
-intronic regions, rRNA genes, mitochondrial genome, chloroplast genome
-(only for plants)}
+\item{p}{A ggplot object, showing percentages of fragments assigned to
+different genomic features, such as genic regions, intergenic regions,
+exonic regions, intronic regions, rRNA genes, mitochondrial genome,
+chloroplast genome (only for plants)}
 \item{IR_rate}{a data frame containing the percentages of reads mapping to
 intergenic regions, which can be used for the "IR\%" method for correcting
 for gDNA contamination}
@@ -34,19 +34,23 @@ Generate plots showing percentages of fragments assigned to different
 genomic features.
 }
 \examples{
-\dontrun{
 tmp_dir <- tempdir()
 ## download feaureCounts results
-count_url <- paste0("https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-           "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1")
-download.file(url= count_url,
-              destfile = file.path(tmp_dir, "read_count_summary.RData"),
-              mode = "wb")
+count_url <- paste0(
+    "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
+    "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+)
+download.file(
+    url = count_url,
+    destfile = file.path(tmp_dir, "read_count_summary.RData"),
+    mode = "wb"
+)
 load(file.path(tmp_dir, "read_count_summary.RData"))
 metadata <- counts_summary$metadata
 counts_summary$metadata <- NULL
-p <- check_read_distribution(featurecounts_list = counts_summary,
-                             metadata = metadata)
-print(p$p)
-}
+p <- check_read_distribution(
+    featurecounts_list = counts_summary,
+    metadata = metadata
+)
+p$p
 }

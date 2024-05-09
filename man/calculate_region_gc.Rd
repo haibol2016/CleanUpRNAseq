@@ -7,10 +7,10 @@
 calculate_region_gc(region = NULL, BSgenome = NULL, batch_size = 2000)
 }
 \arguments{
-\item{region}{A data frame containing the columns: "Chr",    "Start",
-"End", and "Strand", such as a data frame contained in a sublist named
-\emph{intergenic_region} from the output of the \code{\link[=get_feature_saf]{get_feature_saf()}} function, or
-a object of \link[GenomicRanges:GRangesList-class]{GenomicRanges::GRangesList} or
+\item{region}{A data frame containing the columns: "Chr", "Start", "End",
+and "Strand", such as a data frame contained in a sublist named
+\emph{intergenic_region} from the output of the \code{\link[=get_feature_saf]{get_feature_saf()}} function,
+or a object of \link[GenomicRanges:GRangesList-class]{GenomicRanges::GRangesList} or
 \link[GenomicRanges:GRanges-class]{GenomicRanges::GRanges}.}
 
 \item{BSgenome}{An object of \link[BSgenome:BSgenome-class]{BSgenome::BSgenome}. Make sure the
@@ -31,39 +31,54 @@ A data.frame contains two columns: gc_content and width.
 Calculate GC content of genomic regions
 }
 \examples{
-
 library("BSgenome.Hsapiens.UCSC.hg38")
 ucsc_BSgenome <- BSgenome.Hsapiens.UCSC.hg38
 ucsc_seqnames <-
-     seqnames(ucsc_BSgenome)[!grepl("_alt|fix|hap\\\\d+", seqnames(ucsc_BSgenome))]
+    seqnames(ucsc_BSgenome)[!grepl(
+        "_alt|fix|hap\\\\d+",
+        seqnames(ucsc_BSgenome)
+    )]
 
-## Wierd: BSgenome.Hsapiens.UCSC.hg19 has both chrM and chrMT for mitochondrial
-## genome. renomve chrMT.
+## Wierd: BSgenome.Hsapiens.UCSC.hg19 has both chrM and chrMT for
+## mitochondrial genome. renomve chrMT.
 
-if (all(c("chrM", "chrMT") \%in\% ucsc_seqnames))
-{
-   ucsc_seqnames <- ucsc_seqnames[!ucsc_seqnames \%in\% "chrMT"]
+if (all(c("chrM", "chrMT") \%in\% ucsc_seqnames)) {
+    ucsc_seqnames <- ucsc_seqnames[!ucsc_seqnames \%in\% "chrMT"]
 }
 
-ensembl_seqnames <- gsub("^chr", "",
-                    gsub("chrM$", "MT",
-                    gsub("v", ".",
-                    gsub("_random|chr[^_]+_", "", ucsc_seqnames))))
- ## for BSgenome.Hsapiens.UCSC.hg19, scaffold seqnames start with lower case,
- ## should be changed to upper case. For example, change "gl000231" to
- ## "GL000231". Add a suffix ".1" to these scaffold seqnames.
+ensembl_seqnames <- gsub(
+    "^chr", "",
+    gsub(
+        "chrM$", "MT",
+        gsub(
+            "v", ".",
+            gsub("_random|chr[^_]+_", "", ucsc_seqnames)
+        )
+    )
+)
+## for BSgenome.Hsapiens.UCSC.hg19, scaffold seqnames start with lower case,
+## should be changed to upper case. For example, change "gl000231" to
+## "GL000231". Add a suffix ".1" to these scaffold seqnames.
 
-seqname_alias <- data.frame(ucsc = ucsc_seqnames, ensembl = ensembl_seqnames)
-bsgenome <- UCSC2Ensembl(UCSC_BSgenome = BSgenome.Hsapiens.UCSC.hg38,
-                         genome_version = "GRCh38",
-                         seqname_alias = seqname_alias)
-region <- data.frame(GeneID = as.character(1:10),
-                    Chr = rep("1", 10),
-                    Start = 100000* (1:10),
-                    End = 100000* (1:10) + 1000,
-                    Strand = rep("+", 10))
+seqname_alias <- data.frame(ucsc = ucsc_seqnames,
+                            ensembl = ensembl_seqnames)
+bsgenome <- UCSC2Ensembl(
+    UCSC_BSgenome = BSgenome.Hsapiens.UCSC.hg38,
+    genome_version = "GRCh38",
+    seqname_alias = seqname_alias
+)
+region <- data.frame(
+    GeneID = as.character(seq_len(10)),
+    Chr = rep("1", 10),
+    Start = 100000 * (seq_len(10)),
+    End = 100000 * (seq_len(10)) + 1000,
+    Strand = rep("+", 10)
+)
 
-gc_contents <-  calculate_region_gc(region = region,
-                                    BSgenome = bsgenome,
-                                    batch_size = 2000)
+gc_contents <- calculate_region_gc(
+    region = region,
+    BSgenome = bsgenome,
+    batch_size = 2000
+)
+
 }

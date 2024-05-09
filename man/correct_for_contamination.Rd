@@ -18,17 +18,8 @@ correct_for_contamination(
   Ensembl_BSgenome = NULL,
   UCSC_BSgenome = NULL,
   genome_version = "GRCh38",
-  seqname_alias = data.frame(ucsc = paste0("chr", c(1:22, "X", "Y", "M")), ensembl =
-    c(1:22, "X", "Y", "MT")),
-  genome_fasta = NULL,
-  out_dir = tempdir(),
-  organism_latin_name = "Homo sapien",
-  common_name = "human",
-  seed_file_name = NULL,
-  genome_fasta_url = NULL,
-  genome_release_date = "August 2007",
-  genome_fasta_source = "Ensembl",
-  Bsgenome_pkg_version = "1.0.0",
+  seqname_alias = data.frame(ucsc = paste0("chr", c(seq_len(22), "X", "Y", "M")), ensembl
+    = c(seq_len(22), "X", "Y", "MT")),
   stranded_metadata = data.frame(salmon_quant_file_strand = vector(mode = "character"),
     salmon_quant_file_reverse_strand = vector(mode = "character"), sample_name =
     vector(mode = "character")),
@@ -36,60 +27,64 @@ correct_for_contamination(
 )
 }
 \arguments{
-\item{is_stranded_library}{A logical(1), specifying whether the RNA-seq library
-is stranded or not.}
+\item{is_stranded_library}{A logical(1), specifying whether the RNA-seq
+library is stranded or not.}
 
-\item{salmon_summary}{A list of matrices containing gene-level abundances, counts,
-lengths, such as the output of the \code{\link[=salmon_res]{salmon_res()}} function. For more details,
-See \code{\link[tximport:tximport]{tximport::tximport()}}. It can be an element named \emph{salmon_summary}
-of the list returned by the \code{\link[=create_diagnostic_plot]{create_diagnostic_plot()}} function.}
+\item{salmon_summary}{A list of matrices containing gene-level abundances,
+counts,lengths, such as the output of the \code{\link[=salmon_res]{salmon_res()}} function. For
+more details, See \code{\link[tximport:tximport]{tximport::tximport()}}. It can be an element named
+\emph{salmon_summary} of the list returned by the \code{\link[=create_diagnostic_plot]{create_diagnostic_plot()}}
+function.}
 
 \item{correction_method}{A character(1), specifying a method for correcting
 for gDNA contamination. The options are "GC\%", "Global", "IR\%".}
 
-\item{featurecounts_summary}{It can be an element named \emph{featurecounts_summary}
-of the list returned by the \code{\link[=create_diagnostic_plot]{create_diagnostic_plot()}} function. It is only
+\item{featurecounts_summary}{It can be an element named
+\emph{featurecounts_summary} of the list returned by the
+\code{\link[=create_diagnostic_plot]{create_diagnostic_plot()}} function. It is only
 needed for correcting for gDNA contamination in unstranded RNA-seq data
 using the "Global" or the "GC\%" method.}
 
-\item{saf_list}{A list of data frames containing annotation in the SAF format.
-It can be an element named \emph{saf_list} of the list returned by the
+\item{saf_list}{A list of data frames containing annotation in the SAF
+format. It can be an element named \emph{saf_list} of the list returned by the
 \code{\link[=create_diagnostic_plot]{create_diagnostic_plot()}} function. It is only needed for correcting for
 gDNA contamination in unstranded RNA-seq data using the "GC\%" method..}
 
-\item{unstranded_metadata}{A data frame, with column names: sample_name, group,
-IR_rate (the percentages of reads mapping to the intergenic region for all
-samples), batch if any, and other possible covariates for linear models used
-to correct for gDNA contamination. The \emph{sample_name} and \emph{group} columns
-contain the unique sample labels and the experimental conditions for each sample,
-respectively. The order of the columns doesn't matter. It can be an element
-named \emph{metadata} of the list returned by the \code{\link[=create_diagnostic_plot]{create_diagnostic_plot()}}
-function. It is only needed for unstranded RNA-seq data.}
+\item{unstranded_metadata}{A data frame, with column names: sample_name,
+group, IR_rate (the percentages of reads mapping to the intergenic region
+for all samples), batch if any, and other possible covariates for linear
+models used to correct for gDNA contamination. The \emph{sample_name} and
+\emph{group} columns contain the unique sample labels and the experimental
+conditions for each sample, respectively. The order of the columns
+doesn't matter. It can be an element named \emph{metadata} of the list returned
+by the \code{\link[=create_diagnostic_plot]{create_diagnostic_plot()}} function. It is only needed for
+unstranded RNA-seq data.}
 
-\item{covariates}{A character(n), specifying the names of covariates for linear
-models used to correcting for gDNA contamination and other nuisance paramenters.
-The names of covariates must be contained in the column names of the \code{metadata}
-data frame.}
+\item{covariates}{A character(n), specifying the names of covariates for
+linear models used to correcting for gDNA contamination and other
+nuisance paramenters. The names of covariates must be contained in the
+column names of the \code{metadata} data frame.}
 
-\item{covariate_types}{A character(n), specifying the data types of covariates.
-"numeric" for a quantitative covariate; "categorical" for a non-quantitative
-covariate, such as batch information. The length of \code{covariate_types} must
-be the same as that of \code{covariates}.}
+\item{covariate_types}{A character(n), specifying the data types of
+covariates. "numeric" for a quantitative covariate; "categorical" for a
+non-quantitative covariate, such as batch information. The length of
+\code{covariate_types} must be the same as that of \code{covariates}.}
 
-\item{Ensembl_BSgenome}{An object of the \link[BSgenome:BSgenome-class]{BSgenome::BSgenome} in the UCSC
-style, which is not avaible from Bioconductor. You can build such a package
-using a multi-fasta file for the reference genome of interest using the
-\code{\link[=make_BSgenome]{make_BSgenome()}} function.}
+\item{Ensembl_BSgenome}{An object of the \link[BSgenome:BSgenome-class]{BSgenome::BSgenome} in the
+UCSCstyle, which is not avaible from Bioconductor. You can build such a
+package using a multi-fasta file for the reference genome of interest
+using the \code{\link[=make_BSgenome]{make_BSgenome()}} function.}
 
 \item{UCSC_BSgenome}{An object of the \link[BSgenome:BSgenome-class]{BSgenome::BSgenome} in the UCSC
 style, such as BSgenome.Hsapiens.UCSC.hg38.It is only needed for correcting
 for gDNA contamination in unstranded RNA-seq data using the "GC\%" method
-and a UCSC-style BSgenome is provided as an alternative to building a BSgenome
-package from scratch.}
+and a UCSC-style BSgenome is provided as an alternative to building a
+BSgenome package from scratch.}
 
-\item{genome_version}{A character(1), specifying the genome build, such as
-"GRCh38". It is only needed for correcting for gDNA contamination in
-unstranded RNA-seq data using the "GC\%" method.}
+\item{genome_version}{A character(1), specifying the genome version, such as
+"GRCh38". Caution: make sure the genome_version here is the same as that
+for the \code{\link[=make_ensdb]{make_ensdb()}}. It is only needed for correcting for
+gDNA contamination in unstranded RNA-seq data using the "GC\%" method.}
 
 \item{seqname_alias}{A data frame or a tab-delimited file to a data frame,
 with two columns: ucsc and ensembl for UCSC-style seqnames
@@ -99,47 +94,7 @@ data using the "GC\%" method and a UCSC-style BSgenome is provided. All the
 chromosomes/scaffolds in the primary reference genome assembly should be
 provided in the data frame.}
 
-\item{genome_fasta}{A character(1) specifying a path for a multi-fasta file
-for a reference genome. It can be a gzip-compressed or uncompressed fasta
-file. It is only needed for correcting for gDNA contamination in unstranded
-RNA-seq data using the "GC\%" method.}
-
-\item{out_dir}{A character(1) specifying a path for output split, compressed
-fasta files for build a BSgenome package.It is only needed for correcting
-for gDNA contamination in unstranded RNA-seq data using the "GC\%" method.}
-
-\item{organism_latin_name}{A character(1), specifying the Latin name of the
-species of the reference genome, such as "Homo sapiens" for the human. It
-is only needed for correcting for gDNA contamination in unstranded RNA-seq
-data using the "GC\%" method.}
-
-\item{common_name}{A character(1), specifying the common name of the species
-of the reference genome, such as "Human". It is only needed for correcting
-for gDNA contamination in unstranded RNA-seq data using the "GC\%" method.}
-
-\item{seed_file_name}{A character(1), specifying the path to a seed file to
-be created for building a BSgenome package. It is only needed for correcting
-for gDNA contamination in unstranded RNA-seq data using the "GC\%" method.}
-
-\item{genome_fasta_url}{A character(1), specifying the URL from where the reference
-genome fasta file is downloaded, such as
-"https://ftp.ensembl.org/pub/release-111/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz".
-It is only needed for correcting for gDNA contamination in unstranded RNA-seq
-data using the "GC\%" method.}
-
-\item{genome_release_date}{A character(1), specifying the genome assembly release
-date, such as "August 2020". It is only needed for correcting for
-gDNA contamination in unstranded RNA-seq data using the "GC\%" method.}
-
-\item{genome_fasta_source}{A character(1), specifying the source of the genome
-fasta file, such as "Ensembl". It is only needed for correcting for
-gDNA contamination in unstranded RNA-seq data using the "GC\%" method.}
-
-\item{Bsgenome_pkg_version}{A character(1), specifying the version of a BSgenome
-package to be build, such as "1.0.0". It is only needed for correcting for
-gDNA contamination in unstranded RNA-seq data using the "GC\%" method.}
-
-\item{stranded_metadata}{A data frame, a matrix, or a path to a tab-delimited
+\item{stranded_metadata}{A data frame or a path to a tab-delimited
 text file with column names: BAM_file, sample_name, and group. The
 \emph{salmon_quant_file_strand} and \emph{salmon_quant_file_reverse_strand}column
 contains the full paths to \emph{quant.sf} files for quantitation of gene
@@ -150,7 +105,7 @@ for details. The \emph{sample_name} columns contain the unique sample labels for
 each sample. The order of the three columns doesn't matter.
 It is only needed for stranded RNA-seq data.}
 
-\item{ensdb_sqlite}{An EnsDb object of a character(1) vector, specifying a
+\item{ensdb_sqlite}{An EnsDb object or a character(1) vector, specifying a
 path to an SQLite database for an object of the \link[ensembldb:EnsDb-class]{ensembldb::EnsDb}.
 It can be an element named \emph{ensdb_sqlite_file} of the list returned by the
 \code{\link[=create_diagnostic_plot]{create_diagnostic_plot()}} function. It is needed for the "GC\%"
@@ -159,9 +114,10 @@ stranded RNA-seq data.}
 }
 \value{
 For unstranded RNA-seq datat, it returns a gDNA contamination
-corrected count matrix if the "GC\%" or "Global" correction method is chosen,
-or a log2CPM matrix if the "IR\%" correction method is used. For stranded
-RNA-seq data, it returns a gDNA contamination corrected count matrix.
+corrected count matrix if the "GC\%" or "Global" correction method is
+chosen, or a log2CPM matrix if the "IR\%" correction method is used.
+For stranded RNA-seq data, it returns a gDNA contamination corrected
+count matrix.
 }
 \description{
 Correction for gDNA contamination in RNA-seq data using the "GC\%", "IR\%" or
@@ -170,49 +126,68 @@ Correction for gDNA contamination in RNA-seq data using the "GC\%", "IR\%" or
 \examples{
 \dontrun{
 metadata <- read.delim(system.file("extdata",
-                                    "CD1A.RNAseq.metadata.txt",
-                                     package = "CleanUpRNAseq"))
+    "CD1A.RNAseq.metadata.txt",
+    package = "CleanUpRNAseq"
+))
 options(timeout = max(3000, getOption("timeout")))
-gtf_url <- paste0("https://ftp.ensembl.org/pub/release-110/gtf/",
-                  "homo_sapiens/Homo_sapiens.GRCh38.110.gtf.gz")
+gtf_url <- paste0(
+    "https://ftp.ensembl.org/pub/release-110/gtf/",
+    "homo_sapiens/Homo_sapiens.GRCh38.110.gtf.gz"
+)
 gtf <- basename(gtf_url)
 tmp_dir <- tempdir()
-download.file(url = gtf_url,
-              destfile = file.path(tmp_dir, gtf),
-              mode = "wb")
+download.file(
+    url = gtf_url,
+    destfile = file.path(tmp_dir, gtf),
+    mode = "wb"
+)
 gtf <- file.path(tmp_dir, gtf)
 
 diagnosis_res <-
-  create_diagnostic_plot(gtf = gtf,
-                       metadata = metadata,
-                       normalization = "DESeq2",
-                       ensdb_filename =
-                           file.path(tmp_dir, "GRCh38.GTF.EnsDb.sqlite"),
-                       out_dir = tmp_dir)
+    create_diagnostic_plot(
+        gtf = gtf,
+        metadata = metadata,
+        normalization = "DESeq2",
+        ensdb_sqlite =
+            file.path(tmp_dir, "GRCh38.GTF.EnsDb.sqlite"),
+        out_dir = tmp_dir,
+        threads = 1
+    )
 library("BSgenome.Hsapiens.UCSC.hg38")
 UCSC_BSgenome <- BSgenome.Hsapiens.UCSC.hg38
-sequences_to_keep <- seqnames(UCSC_BSgenome)[!grepl("_(alt|fix|hap\\\\d+)$",
-                                                 seqnames(UCSC_BSgenome))]
-ensembl_chr <- gsub("v", ".",
-                    gsub("_random$", "",
-                        gsub("^chr.+?_", "", sequences_to_keep)))
+sequences_to_keep <- seqnames(UCSC_BSgenome)[!grepl(
+    "_(alt|fix|hap\\\\d+)$",
+    seqnames(UCSC_BSgenome)
+)]
+ensembl_chr <- gsub(
+    "v", ".",
+    gsub(
+        "_random$", "",
+        gsub("^chr.+?_", "", sequences_to_keep)
+    )
+)
 ensembl_chr <- gsub("^chr", "", gsub("chrM", "chrMT", ensembl_chr))
 
+
 corrected_expression <-
-correct_for_contamination(is_stranded_library = FALSE,
-                          salmon_summary = diagnosis_res$salmon_summary,
-                          correction_method = "GC\%",
-                          featurecounts_summary =
-                            diagnosis_res$featurecounts_summary,
-                          saf_list = diagnosis_res$saf_list,
-                          unstranded_metadata = diagnosis_res$metadata,
-                          covariates = c("batch", "IR_rate"),
-                          covariate_types = c("categorical", "numeric"),
-                          UCSC_BSgenome = UCSC_BSgenome,
-                          seqname_alias =
-                                  data.frame(ucsc = sequences_to_keep,
-                                             ensembl = ensembl_chr),
-                          ensdb_sqlite = diagnosis_res$ensdb_sqlite_file)
+    correct_for_contamination(
+        is_stranded_library = FALSE,
+        salmon_summary = diagnosis_res$salmon_summary,
+        correction_method = "GC\%",
+        featurecounts_summary =
+            diagnosis_res$featurecounts_summary,
+        saf_list = diagnosis_res$saf_list,
+        unstranded_metadata = diagnosis_res$metadata,
+        covariates = c("batch", "IR_rate"),
+        covariate_types = c("categorical", "numeric"),
+        UCSC_BSgenome = UCSC_BSgenome,
+        seqname_alias =
+            data.frame(
+                ucsc = sequences_to_keep,
+                ensembl = ensembl_chr
+            ),
+        ensdb_sqlite = diagnosis_res$ensdb_sqlite_file
+    )
 }
 
 }

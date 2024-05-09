@@ -21,37 +21,33 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' options(timeout = max(3000, getOption("timeout")))
-#' gtf_url <- paste0("https://ftp.ensembl.org/pub/release-110/gtf/",
-#'                   "homo_sapiens/Homo_sapiens.GRCh38.110.gtf.gz")
-#' gtf <- basename(gtf_url)
+#' gtf <- system.file("extdata", "example.gtf.gz",
+#'                    package = "CleanUpRNAseq")
 #' tmp_dir <- tempdir()
-#' download.file(url = gtf_url,
-#'               destfile = file.path(tmp_dir, gtf),
-#'               mode = "wb")
-#'
-#' hs_ensdb_sqlite <- make_ensdb(gtf = file.path(tmp_dir, gtf),
-#'                               outfile = "EnsDb.hs.v110.sqlite",
-#'                               organism_latin_name = "Homo_Sapiens",
-#'                               genome_version = "GRCh38",
-#'                               Ensemble_release_version = 110)
-#' }
+#' hs_ensdb_sqlite <- make_ensdb(
+#'     gtf = gtf,
+#'     outfile = file.path(tmp_dir, "EnsDb.hs.v110.sqlite"),
+#'     organism_latin_name = "Homo_Sapiens",
+#'     genome_version = "GRCh38",
+#'     Ensembl_release_version = 110
+#' )
 
-
-make_ensdb <- function(gtf = NULL,
-                       outfile = NULL,
-                       organism_latin_name = "Homo_sapiens",
-                       genome_version = "GRCh38",
-                       Ensembl_release_version = 110)
-{
-  if (length(gtf)!= 1 || !file.exists(gtf)) {
-    stop("A GTF file is required!")
-  }
-  ensdb_sqlite_file <- ensDbFromGtf(gtf = gtf,
-                                    outfile = outfile,
-                                    organism = organism_latin_name,
-                                    genomeVersion = genome_version,
-                                    version = Ensembl_release_version)
-  ensdb_sqlite_file
+make_ensdb <-
+    function(
+        gtf = NULL,
+        outfile = NULL,
+        organism_latin_name = "Homo_sapiens",
+        genome_version = "GRCh38",
+        Ensembl_release_version = 110) {
+    if (!file.exists(gtf)) {
+        stop("A GTF file is required!")
+    }
+    ensdb_sqlite_file <- ensDbFromGtf(
+        gtf = gtf,
+        outfile = outfile,
+        organism = organism_latin_name,
+        genomeVersion = genome_version,
+        version = Ensembl_release_version
+    )
+    ensdb_sqlite_file
 }

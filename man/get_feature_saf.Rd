@@ -52,12 +52,22 @@ regions,intergenic regions, exonic regions, intronic regions, rRNA genes,
 mitochondrial genome, chloroplast genome (only for plants).
 }
 \examples{
-\dontrun{
-library("EnsDb.Hsapiens.v86")
-bam_file <- system.file("extdata","K084CD7PCD1N.srt.bam",
-                        package = "CleanUpRNAseq")
-saf_list <- get_feature_saf(ensdb_sqlite = EnsDb.Hsapiens.v86,
-                            bamfile = bam_file,
-                            mitochondrial_genome = "MT")
-}
+gtf <- system.file("extdata", "example.gtf.gz",
+                   package = "CleanUpRNAseq")
+tmp_dir <- tempdir()
+hs_ensdb_sqlite <- make_ensdb(
+    gtf = gtf,
+    outfile = file.path(tmp_dir, "EnsDb.hs.v110.sqlite"),
+    organism_latin_name = "Homo_Sapiens",
+    genome_version = "GRCh38",
+    Ensembl_release_version = 110
+)
+bam_file <- system.file("extdata", "K084CD7PCD1N.srt.bam",
+    package = "CleanUpRNAseq"
+)
+saf_list <- get_feature_saf(
+    ensdb_sqlite = hs_ensdb_sqlite,
+    bamfile = bam_file,
+    mitochondrial_genome = "MT"
+)
 }

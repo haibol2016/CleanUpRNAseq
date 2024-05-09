@@ -29,11 +29,12 @@ columns doesn't matter.}
 \item{isPairedEnd}{A logical(1), indicating whether the sequencing data is
 paired-end or not.}
 
-\item{strandSpecific}{An integer(1), specifying the strandedness of the RNA-seq
-libraries. The possible options are 0 (unstranded), 1 (stranded, read 1 or
-single-end read comes from the forward/sense strand) and 2
-(reversely stranded, read 1 or single-end read comes from the reverse/antisense
-strand).See \url{https://salmon.readthedocs.io/en/latest/library_type.html} and
+\item{strandSpecific}{An integer(1), specifying the strandedness of the
+RNA-seq libraries. The possible options are 0 (unstranded), 1 (stranded,
+read 1 or single-end read comes from the forward/sense strand) and 2
+(reversely stranded, read 1 or single-end read comes from the
+reverse/antisense strand).
+See \url{https://salmon.readthedocs.io/en/latest/library_type.html} and
 \url{https://chipster.csc.fi/manual/library-type-summary.html} for more details
 about types of stranded libraries.}
 
@@ -55,13 +56,13 @@ multi-mapping reads and/or multi-overlapping reads. FALSE by default.}
 must satisfy in order to be counted. For paired-end reads, at least one end
 should satisfy this criteria. 0 by default.}
 
-\item{saf_list}{A list of data frames containing annotation in the SAF format,
-such as the output of the \code{\link[=get_feature_saf]{get_feature_saf()}} function.}
+\item{saf_list}{A list of data frames containing annotation in the SAF
+format, such as the output of the \code{\link[=get_feature_saf]{get_feature_saf()}} function.}
 
 \item{gtf}{A character(1), specifying a path to a GTF file.}
 
-\item{threads}{An integer(1), number of threads for \code{\link[Rsubread:featureCounts]{Rsubread::featureCounts()}}
-calling.}
+\item{threads}{An integer(1), number of threads for
+\code{\link[Rsubread:featureCounts]{Rsubread::featureCounts()}} calling.}
 
 \item{verbose}{A logical(1) vector, indicating if verbose information for
 debugging will be generated. This may include information such as unmatched
@@ -94,39 +95,52 @@ rRNA genes, mitochrondrial genome, chloroplast genome (only for plants), and
 gene-level exonic regions using \code{\link[Rsubread:featureCounts]{Rsubread::featureCounts()}}.
 }
 \examples{
-\dontrun{
+if (interactive()){
 library(R.utils)
 options(timeout = max(3000, getOption("timeout")))
 bams <- system.file("extdata",
-                   c("K084CD7PCD1N.srt.bam", "K084CD7PCD1P.srt.bam"),
-                   package = "CleanUpRNAseq")
+    "K084CD7PCD1N.srt.bam",
+    package = "CleanUpRNAseq"
+)
 
-metadata <- data.frame(sample_name = c("CD1AN_m2_1", "CD1AP_m2_1"),
-                       BAM_file = bams,
-                       group = c("CD1AN", "CD1AP"))
+metadata <- data.frame(
+    sample_name = "CD1AN_m2_1",
+    BAM_file = bams,
+    group = "CD1AN"
+)
 
-#download the GTF file
-gtf_url <- paste0("https://ftp.ensembl.org/pub/release-110/gtf/",
-                  "homo_sapiens/Homo_sapiens.GRCh38.110.gtf.gz")
+# download the GTF file
+gtf_url <- paste0(
+    "https://ftp.ensembl.org/pub/release-110/gtf/",
+    "homo_sapiens/Homo_sapiens.GRCh38.110.gtf.gz"
+)
 gtf <- basename(gtf_url)
 tmp_dir <- tempdir()
-download.file(url = gtf_url,
-              destfile = file.path(tmp_dir, gtf),
-              mode = "wb")
-gunzip(file.path(tmp_dir, gtf),remove = TRUE)
+download.file(
+    url = gtf_url,
+    destfile = file.path(tmp_dir, gtf),
+    mode = "wb"
+)
+gunzip(file.path(tmp_dir, gtf), remove = TRUE)
 
-#download the SAF file
-saf_url <- "https://drive.google.com/uc?export=download&id=1jbYiGY44Js2Y58A7nDl85dwRf4Hq0MHm"
-download.file(url = saf_url,
-              destfile = file.path(tmp_dir, "hs_saf_list.RData"),
-              mode = "wb")
+# download the SAF file
+saf_url <- paste0("https://drive.google.com/uc?export=download&",
+"id=1jbYiGY44Js2Y58A7nDl85dwRf4Hq0MHm")
+download.file(
+    url = saf_url,
+    destfile = file.path(tmp_dir, "hs_saf_list.RData"),
+    mode = "wb"
+)
 load(file.path(tmp_dir, "hs_saf_list.RData"))
 
-counts_list <- summarize_reads(metadata = metadata,
-                               isPaired = TRUE,
-                               strandSpecific = 0,
-                               saf_list = saf_list,
-                               gtf = gsub(".gz", "", file.path(tmp_dir, gtf)),
-                               threads = 1)
+counts_list <- summarize_reads(
+    metadata = metadata,
+    isPaired = TRUE,
+    strandSpecific = 0,
+    saf_list = saf_list,
+    gtf = gsub(".gz", "", file.path(tmp_dir, gtf)),
+    threads = 1
+)
 }
+
 }

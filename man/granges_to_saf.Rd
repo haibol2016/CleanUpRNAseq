@@ -16,10 +16,11 @@ A data frame with columns: "GeneID", "Chr", "Start", "End","Strand".
 Convert genomic features from GRanges to Simplified Annotation Format (SAF)
 }
 \examples{
-# example code
 library("GenomicRanges")
-gr0 <- GRanges(Rle(c("chr2", "chr2", "chr1", "chr3"),
-               c(1, 3, 2, 4)), IRanges(1:10, width=10:1))
+gr0 <- GRanges(Rle(
+    c("chr2", "chr2", "chr1", "chr3"),
+    c(1, 3, 2, 4)
+), IRanges(seq_len(10), width = 10:1))
 saf <- granges_to_saf(gr0)
 
 }

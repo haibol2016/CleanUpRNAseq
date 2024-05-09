@@ -9,8 +9,9 @@ check_read_assignment_stat(assignment_stat = NULL)
 \arguments{
 \item{assignment_stat}{A data frame containing the assignment statistics with
 GTF as annotation by the \code{\link[Rsubread:featureCounts]{Rsubread::featureCounts()}} function, such as the
-\code{stat} element in the sublist \code{gtf} in the output of the \code{\link[=summarize_reads]{summarize_reads()}}
-function. You can access it via \code{featureCounts()$gtf$stat}.}
+\code{stat} element in the sublist \code{gtf} in the output of the
+\code{\link[=summarize_reads]{summarize_reads()}} function. You can access it via
+\code{featureCounts()$gtf$stat}.}
 }
 \value{
 A ggplot object, showing percentages and number of fragments in each
@@ -20,18 +21,24 @@ assignment category as determined by \code{\link[Rsubread:featureCounts]{Rsubrea
 Visualize assignment statistics of reads/fragments by featureCounts
 }
 \examples{
-\dontrun{
 tmp_dir <- tempdir()
 options(timeout = max(3000, getOption("timeout")))
 ## download feaureCounts results
-count_url <- paste0("https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-           "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1")
-download.file(url= count_url,
-              destfile = file.path(tmp_dir, "read_count_summary.RData"),
-              mode = "wb")
+count_url <- paste0(
+    "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
+    "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+)
+download.file(
+    url = count_url,
+    destfile = file.path(tmp_dir, "read_count_summary.RData"),
+    mode = "wb"
+)
 load(file.path(tmp_dir, "read_count_summary.RData"))
 
-p <- check_read_assignment_stat(assignment_stat = counts_summary$gtf$stat)
-print(p)
-}
+p <- check_read_assignment_stat(
+    assignment_stat =
+        counts_summary$gtf$stat
+)
+p
+
 }

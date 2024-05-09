@@ -15,8 +15,8 @@ check_expr_distribution(
 \item{counts}{A numeric matrix or data frame containing gene expression count
 data for an RNA-seq experiment, with row names for gene ID and column names
 for sample names. If values are not integers, it will be rounded. You can
-use the count table outputted by the \code{\link[=summarize_reads]{summarize_reads()}} function with a GTF
-file as annotation.}
+use the count table outputted by the \code{\link[=summarize_reads]{summarize_reads()}} function with
+a GTF file as annotation.}
 
 \item{normalization}{A character(1) vector, specifying a between-sample
 normalization methods: DESeq2's  median of ratios method, smooth quantile
@@ -34,9 +34,9 @@ A list of 3 ggplot objects.
 distribution, on a log scale}
 \item{density_plot}{density plots showing DESeq2-normalized gene-level
 count distribution, on a log scale}
-\item{ecd_plot}{plots showing empricial cumulative distribution of fraction
-of genes with CPM greater than or equal to a given CPM
-on a log scale}
+\item{ecd_plot}{plots showing empricial cumulative distribution of
+fraction  of genes with CPM greater than or equal to a
+given CPM on a log scale}
 }
 }
 \description{
@@ -44,23 +44,27 @@ Compare expression distribution by boxplot, density plot and empirical
 cumulative distribution plot
 }
 \examples{
-\dontrun{
 library(patchwork)
 tmp_dir <- tempdir()
 ## download feaureCounts results
-count_url <- paste0("https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-           "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1")
-download.file(url= count_url,
-              destfile = file.path(tmp_dir, "read_count_summary.RData"),
-              mode = "wb")
+count_url <- paste0(
+    "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
+    "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+)
+download.file(
+    url = count_url,
+    destfile = file.path(tmp_dir, "read_count_summary.RData"),
+    mode = "wb"
+)
 load(file.path(tmp_dir, "read_count_summary.RData"))
 metadata <- counts_summary$metadata
 metadata$group <- gsub("CD1A\\\\(-\\\\)", "CD1A_N", metadata$group)
 metadata$group <- gsub("CD1A\\\\(\\\\+\\\\)", "CD1A_P", metadata$group)
 
-p <- check_expr_distribution(counts = counts_summary$gtf$counts,
-                             normalization = "DESeq2",
-                             metadata = metadata)
-wrap_plots(p, ncol = 1, nrow =3, widths = 6, heights = 8)
-}
+p <- check_expr_distribution(
+    counts = counts_summary$gtf$counts,
+    normalization = "DESeq2",
+    metadata = metadata
+)
+wrap_plots(p, ncol = 1, nrow = 3, widths = 6, heights = 8)
 }

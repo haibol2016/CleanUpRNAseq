@@ -38,20 +38,14 @@ A wrapper function from the ensembldb package to make an EnsDb SQLite
 database from an Ensembl GTF file.
 }
 \examples{
-\dontrun{
-options(timeout = max(3000, getOption("timeout")))
-gtf_url <- paste0("https://ftp.ensembl.org/pub/release-110/gtf/",
-                  "homo_sapiens/Homo_sapiens.GRCh38.110.gtf.gz")
-gtf <- basename(gtf_url)
+gtf <- system.file("extdata", "example.gtf.gz",
+                   package = "CleanUpRNAseq")
 tmp_dir <- tempdir()
-download.file(url = gtf_url,
-              destfile = file.path(tmp_dir, gtf),
-              mode = "wb")
-
-hs_ensdb_sqlite <- make_ensdb(gtf = file.path(tmp_dir, gtf),
-                              outfile = "EnsDb.hs.v110.sqlite",
-                              organism_latin_name = "Homo_Sapiens",
-                              genome_version = "GRCh38",
-                              Ensemble_release_version = 110)
-}
+hs_ensdb_sqlite <- make_ensdb(
+    gtf = gtf,
+    outfile = file.path(tmp_dir, "EnsDb.hs.v110.sqlite"),
+    organism_latin_name = "Homo_Sapiens",
+    genome_version = "GRCh38",
+    Ensembl_release_version = 110
+)
 }

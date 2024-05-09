@@ -22,7 +22,7 @@ fasta files}
 or "chr". Default is "none".}
 }
 \value{
-a character string, which is th path to the directory where split,
+A character string, which is th path to the directory where split,
 compressed fasta files are located.
 }
 \description{
@@ -31,15 +31,18 @@ fasta file for each chromosome/scaffold, such as chr1.fa.gz, chr2.fa.gz,...
 A prefix "chr" may be added if necessary.
 }
 \examples{
-
 out_dir <- tempdir()
 genome_fasta <- file.path(out_dir, "toy.example.fa")
 in_fasta <- file(genome_fasta, open = "w")
-writeLines(">chr1\nATCGCTGCGGATGCGG\n>chr2\nCCCCCCCCCCCGGGGATAAAA\n", in_fasta)
+writeLines(c(">chr1\nATCGCTGCGGATGCGG",
+              ">chr2\nCCCCCCCCCCCGGAAA",
+              ">chrM\nATACTACTGGA"), in_fasta)
 close(in_fasta)
 
-fa_dir <- generate_multifasta(genome_fasta = genome_fasta,
-                              out_dir = out_dir,
-                              prefix = "none")
+fa_dir <- generate_multifasta(
+    genome_fasta = genome_fasta,
+    out_dir = out_dir,
+    prefix = "none"
+)
 
 }

@@ -8,26 +8,34 @@ check_sample_correlation(counts = NULL)
 }
 \arguments{
 \item{counts}{A numeric matrix or data frame containing gene expression count
-data from an RNA-seq experiment, with row names for gene ID and column names
-for sample names. If values are not integers, it will be rounded.}
+data from an RNA-seq experiment, with row names for gene ID and column
+names for sample names. If values are not integers, it will be rounded.}
+}
+\value{
+NULL. A plot with pairwise scatter plots and Pearson correlation
+coefficients is generated. When the sample size is big, save it as tiff
+file.
 }
 \description{
-Generate a panel of plots based on a count table, with the diagonal showing the
-sample names, the lower triangle showing smoothed scatterplots for gene
-expression of pairwise samples, and the upper triangle showing Pearson
-correlation coefficients of gene expression of pairwise samples.
+Generate a panel of plots based on a count table, with the diagonal
+showing the sample names, the lower triangle showing smoothed scatterplots
+for gene expression of pairwise samples, and the upper triangle showing
+Pearson correlation coefficients of gene expression of pairwise samples.
 }
 \examples{
-\dontrun{
 tmp_dir <- tempdir()
 ## download feaureCounts results
-count_url <- paste0("https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-           "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1")
-download.file(url= count_url,
-              destfile = file.path(tmp_dir, "read_count_summary.RData"),
-              mode = "wb")
+count_url <- paste0(
+    "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
+    "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+)
+download.file(
+    url = count_url,
+    destfile = file.path(tmp_dir, "read_count_summary.RData"),
+    mode = "wb"
+)
 load(file.path(tmp_dir, "read_count_summary.RData"))
 
 check_sample_correlation(counts = counts_summary$gtf$counts)
-}
+
 }

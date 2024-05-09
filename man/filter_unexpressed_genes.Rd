@@ -19,24 +19,19 @@ filter_unexpressed_genes(
 \arguments{
 \item{counts}{A numeric matrix or data frame containing gene expression count
 data for an RNA-seq experiment, with row names for gene ID and column names
-for sample names. If values are not integers, it will be rounded. This count
-table can be DNA contamination corrected or not.}
+for sample names. If values are not integers, it will be rounded. This
+count table can be DNA contamination corrected or not.}
 
 \item{salmon_res}{An output of \code{\link[=salmon_res]{salmon_res()}}.}
 
 \item{unexpressed_spliced_genes}{A character(n), IDs of spliced genes without
-enough support of junction reads. An output of \code{\link[=get_unexpressed_spliced_genes]{get_unexpressed_spliced_genes()}}
-function.}
+enough support of junction reads. An output of
+\code{\link[=get_unexpressed_spliced_genes]{get_unexpressed_spliced_genes()}} function.}
 
-\item{metadata}{A data frame, a matrix, or a path to a tab-delimited text file
-with column names: sample_name, is_contaminated, and group. The
-\emph{is_contaminated} column specifies whether the sample is DNA-contaminated,
-TRUE/FALSE, based on the various exploratory analyses using this package,
-such as read distribution by \code{\link[=check_read_distribution]{check_read_distribution()}}, expression
-distribution by \code{\link[=check_expr_distribution]{check_expr_distribution()}}, percentage of expressed genes
-by \code{\link[=check_expressed_gene_percentage]{check_expressed_gene_percentage()}}, read distribution across different
-genomic features by \code{\link[=check_read_distribution]{check_read_distribution()}}, and pairwise sample
-correlation by \code{\link[=check_sample_correlation]{check_sample_correlation()}}. The \emph{sample_name} and \emph{group}
+\item{metadata}{A data frame file with column names: sample_name,
+is_contaminated, and group. The \emph{is_contaminated} column specifies whether
+the sample is DNA-contaminated, TRUE/FALSE, based on the various
+exploratory analyses using this package. The \emph{sample_name} and \emph{group}
 columns contain the unique sample labels, and the experimental conditions
 for each sample. The order of the three columns doesn't matter, but the
 order of the sample name in the rows must match those in the count table
@@ -48,7 +43,8 @@ based on samples without genomic DNA contamination.}
 \item{min_samples}{An integer(1), minimal number of samples with TPM above
 min_tpm.}
 
-\item{min_counts}{A numeric(1), minimal count cutoff threshold. Default is 10.}
+\item{min_counts}{A numeric(1), minimal count cutoff threshold. Default is
+10.}
 
 \item{min_tpm}{A numeric(1), minimal TPM cutoff threshold.}
 }
@@ -63,59 +59,76 @@ minimal number of samples are filtered out.
 Filter out unexpressed genes from the count table
 }
 \examples{
-\dontrun{
+if (interactive()) {
 tmp_dir <- tempdir()
 options(timeout = max(3000, getOption("timeout")))
 ## download feaureCounts results
-count_url <- paste0("https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-           "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1")
-download.file(url= count_url,
-              destfile = file.path(tmp_dir, "read_count_summary.RData"),
-              mode = "wb")
+count_url <- paste0(
+    "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
+    "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+)
+download.file(
+    url = count_url,
+    destfile = file.path(tmp_dir, "read_count_summary.RData"),
+    mode = "wb"
+)
 load(file.path(tmp_dir, "read_count_summary.RData"))
 
 # download the EnsDb SQLite database
-ensdb_url <- paste0("https://www.dropbox.com/scl/fi/5i8mwuxe7mcbxz4qvf43g/",
-     "GRCh38.V110.ensdb.sqlite.zip?rlkey=udcpv8yafbdujvom628u6aucb&dl=1")
-download.file(url= ensdb_url,
-              destfile = file.path(tmp_dir, "GRCh38.V110.ensdb.sqlite.zip"),
-              mode = "wb")
+ensdb_url <- paste0(
+    "https://www.dropbox.com/scl/fi/5i8mwuxe7mcbxz4qvf43g/",
+    "GRCh38.V110.ensdb.sqlite.zip?rlkey=udcpv8yafbdujvom628u6aucb&dl=1"
+)
+download.file(
+    url = ensdb_url,
+    destfile = file.path(tmp_dir, "GRCh38.V110.ensdb.sqlite.zip"),
+    mode = "wb"
+)
 unzip(file.path(tmp_dir, "GRCh38.V110.ensdb.sqlite.zip"),
-     exdir = tmp_dir)
+    exdir = tmp_dir
+)
 hs_ensdb_sqlite <- file.path(tmp_dir, "GRCh38.V110.ensdb.sqlite")
 
 unexpressed_spliced_genes <-
-    get_unexpressed_spliced_genes(ensdb_sqlite = hs_ensdb_sqlite,
-                                  junction_counts =
-                                  counts_summary$gtf$counts_junction,
-                                  min_junction_counts = 1,
-                                  min_samples = 1)
+    get_unexpressed_spliced_genes(
+        ensdb_sqlite = hs_ensdb_sqlite,
+        junction_counts =
+            counts_summary$gtf$counts_junction,
+        min_junction_counts = 1,
+        min_samples = 1
+    )
 
 # download the Salmon quantification results
 salmon_url <-
- "https://drive.google.com/uc?export=download&id=13vsobXnENoiYOBo-Vf_e_00xbR8ekc4Z"
+    paste0("https://drive.google.com/uc?export=download&id=",
+    "13vsobXnENoiYOBo-Vf_e_00xbR8ekc4Z")
 destfile <- file.path(tmp_dir, "salmon_quant_summary.RData")
-download.file(url= salmon_url,
-              destfile = destfile,
-              mode = "wb")
+download.file(
+    url = salmon_url,
+    destfile = destfile,
+    mode = "wb"
+)
 
 ## load the salmon_quant object
 load(destfile)
 
-corrected_counts <- global_correction(intergenic_featureCounts_res =
-                                         counts_summary$intergenic_region,
-                                      salmon_res = salmon_quant)
-metadata <-  counts_summary$metadata
+corrected_counts <- global_correction(
+    intergenic_featureCounts_res =
+        counts_summary$intergenic_region,
+    salmon_res = salmon_quant
+)
+metadata <- counts_summary$metadata
 contaminated_sample <- c("CD1A(-)_m2_1", "CD1A(-)_m3_1")
 metadata$is_contaminated <- ifelse(metadata$sample_name \%in\%
-                                    contaminated_sample, "TRUE", FALSE)
+    contaminated_sample, "TRUE", FALSE)
 filtered_corrected_counts <-
-       filter_unexpressed_genes(counts = corrected_counts,
-       salmon_res = salmon_quant,
-       unexpressed_spliced_genes = unexpressed_spliced_genes,
-       metadata = metadata,
-       min_tpm = 1,
-       min_samples = 1)
-
+    filter_unexpressed_genes(
+        counts = corrected_counts,
+        salmon_res = salmon_quant,
+        unexpressed_spliced_genes = unexpressed_spliced_genes,
+        metadata = metadata,
+        min_tpm = 1,
+        min_samples = 1
+    )
 }
 }

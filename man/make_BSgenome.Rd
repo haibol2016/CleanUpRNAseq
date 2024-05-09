@@ -26,8 +26,8 @@ file.}
 \item{out_dir}{A character(1) specifying a path for output split, compressed
 fasta files}
 
-\item{prefix}{A character(1), specifying chromosome prefix. It can be an empty
-string or "chr". Default is "".}
+\item{prefix}{A character(1), specifying chromosome prefix. It can be an
+empty string or "chr". Default is "".}
 
 \item{latin_name}{A character(1), specifying the Latin name of the species of
 the reference genome, such as "Homo sapiens" for the human.}
@@ -42,8 +42,7 @@ of the reference genome, such as "Human".}
 be created for building a BSgenome package.}
 
 \item{fasta_url}{A character(1), specifying the URL from where the reference
-genome fasta file is downloaded, such as
-"https://ftp.ensembl.org/pub/release-111/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz"}
+genome fasta file is downloaded.}
 
 \item{release_date}{A character(1), specifying the genome assembly release
 date, such as "August 2020".}
@@ -55,34 +54,40 @@ file, such as "Ensembl".}
 to be build, such as "1.0.0".}
 }
 \value{
-BSgenome package name
+A BSgenome package name. Users have to install the package
+to use it.
 }
 \description{
 Starting with a multi-fasta file for a reference genome, a BSgenome package
 is created and installed. This function is a wrapper function of three
 functions: \code{\link[=generate_multifasta]{generate_multifasta()}}, \code{\link[=generate_seed_file]{generate_seed_file()}}, and
-\code{\link[=forge_install_BSgenome]{forge_install_BSgenome()}}.
+\code{\link[=forge_BSgenome]{forge_BSgenome()}}.
 }
 \examples{
-if (interactive())
-{
-out_dir <- tempdir()
-genome_fasta <- file.path(out_dir, "toy.example.fa")
-in_fasta <- file(genome_fasta, open = "w")
-writeLines(">chr1\nATCGCTGCGGATGCGG\n>chr2\nCCCCCCCCCCCGGGGATAAAA\n", in_fasta)
-close(in_fasta)
+if (TRUE) {
+    out_dir <- tempdir()
+    genome_fasta <- file.path(out_dir, "toy.example.fa")
+    in_fasta <- file(genome_fasta, open = "w")
+    writeLines(c(">chr1\nATCGCTGCGGATGCGG",
+              ">chr2\nCCCCCCCCCCCGGAAA",
+              ">chrM\nATACTACTGGA"), in_fasta)
+    close(in_fasta)
 
-make_BSgenome(genome_fasta = genome_fasta,
-              out_dir = file.path(out_dir, "multifasta"),
-              prefix = "none",
-              latin_name = "Homo sapiens",
-              common_name = "Human",
-              genome_version = "GRch38",
-              seed_file_name =file.path(out_dir,
-                                        "human.genome.seed.txt"),
-              fasta_url = "http://ftp.ensembl.org/xxx.fa",
-              release_date = "August 2007",
-              source = "Ensembl",
-              version = "1.0.0")
+    make_BSgenome(
+        genome_fasta = genome_fasta,
+        out_dir = file.path(out_dir, "multifasta"),
+        prefix = "none",
+        latin_name = "Homo sapiens",
+        common_name = "Human",
+        genome_version = "GRCh38",
+        seed_file_name = file.path(
+            out_dir,
+            "human.genome.seed.txt"
+        ),
+        fasta_url = "http://ftp.ensembl.org/xxx.fa",
+        release_date = "August 2007",
+        source = "Ensembl",
+        version = "1.0.0"
+    )
 }
 }
