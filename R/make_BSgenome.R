@@ -423,7 +423,7 @@ generate_seed_file <-
 #'         version = "1.0.0"
 #'     )
 #'
-#'     forge_BSgenome(seed_file[2], dest_dir = tempdir())
+#'     forge_BSgenome(seed_file[2], dest_dir = out_dir)
 #' }
 forge_BSgenome <-
     function(
