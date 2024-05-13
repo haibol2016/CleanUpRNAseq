@@ -162,7 +162,6 @@ exploratory_analysis <-
                 annotation_row = anno,
                 annotation_col = anno,
                 annotation_colors = anno_col,
-                silent = TRUE,
                 fontsize = 6,
                 silent = silent,
                 main = "Heatmap showing sample distances",
