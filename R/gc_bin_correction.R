@@ -394,8 +394,8 @@ gc_bin_contamination <- function(intergenic_counts,
         xlab("GC%") +
         ylab("Count per base") +
         facet_wrap(. ~ sample_name, ncol = 3)
-    if (plot && interactive()) {
-        p
+    if (plot) {
+        plot(p)
     }
     gc_bin_contamination
 }

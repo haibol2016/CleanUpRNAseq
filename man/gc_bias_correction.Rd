@@ -49,77 +49,73 @@ of intergenic regions and the total collapsed exons of a gene and is
 subtracted away from the gene count matrix.
 }
 \examples{
-options(timeout = max(3000, getOption("timeout")))
-tmp_dir <- tempdir()
-## download feaureCounts results
-count_url <- paste0(
-    "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-    "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
-)
-download.file(
-    url = count_url,
-    destfile = file.path(tmp_dir, "read_count_summary.RData"),
-    mode = "wb"
-)
-load(file.path(tmp_dir, "read_count_summary.RData"))
+if (interactive()) {
+   options(timeout = max(3000, getOption("timeout")))
+   tmp_dir <- tempdir()
+   ## download feaureCounts results
+   count_url <- paste0(
+       "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
+       "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+   )
+   download.file(
+       url = count_url,
+       destfile = file.path(tmp_dir, "read_count_summary.RData"),
+       mode = "wb"
+   )
+   load(file.path(tmp_dir, "read_count_summary.RData"))
 
-# download the Salmon quantification results
-salmon_url <- paste0(
-    "https://drive.google.com/",
-    "uc?export=download&id=13vsobXnENoiYOBo-Vf_e_00xbR8ekc4Z"
-)
-salmon_destfile <- file.path(tmp_dir, "salmon_quant_summary.RData")
-download.file(
-    url = salmon_url,
-    destfile = salmon_destfile,
-    mode = "wb"
-)
+   # download the Salmon quantification results
+   salmon_url <- paste0(
+       "https://drive.google.com/",
+       "uc?export=download&id=13vsobXnENoiYOBo-Vf_e_00xbR8ekc4Z"
+   )
+   salmon_destfile <- file.path(tmp_dir, "salmon_quant_summary.RData")
+   download.file(url = salmon_url,
+                 destfile = salmon_destfile,
+                 mode = "wb")
 
-## load the salmon_quant object
-load(salmon_destfile)
+   ## load the salmon_quant object
+   load(salmon_destfile)
 
-gene_gc_content_url <-
-    paste0(
-        "https://www.dropbox.com/scl/fi/taoj18w5t4up22d04xihk/GRCh38.gene.",
-        "exon.collapsed.GC.content.RDS?rlkey=zj31ul2slckrn5zm8vq6tgq31&dl=1"
-    )
-gene_gc_destfile <- file.path(
-    tmp_dir,
-    "GRCh38.gene.exon.collapsed.GC.content.RDS"
-)
-download.file(
-    url = gene_gc_content_url,
-    destfile = gene_gc_destfile,
-    mode = "wb"
-)
+   gene_gc_content_url <-
+       paste0(
+           "https://www.dropbox.com/scl/fi/taoj18w5t4up22d04xihk/GRCh38.gene.",
+           "exon.collapsed.GC.content.RDS?rlkey=zj31ul2slckrn5zm8vq6tgq31&dl=1"
+       )
+   gene_gc_destfile <- file.path(tmp_dir,
+                                 "GRCh38.gene.exon.collapsed.GC.content.RDS")
+   download.file(url = gene_gc_content_url,
+                 destfile = gene_gc_destfile,
+                 mode = "wb")
 
-## load the gene_ object
-gene_gc <- readRDS(gene_gc_destfile)
+   ## load the gene_ object
+   gene_gc <- readRDS(gene_gc_destfile)
 
-intergenic_gc_content_url <-
-    paste0(
-        "https://www.dropbox.com/scl/fi/ik5z5etbr63nnv43jna8c/GRCh38.",
-        "intergenic.GC.content.RDS?rlkey=kxrn6ixdnvhpba9h7w2r265xp&dl=1"
-    )
-intergenic_gc_destfile <- file.path(
-    tmp_dir,
-    "GRCh38.intergenic.GC.content.RDS"
-)
-download.file(
-    url = intergenic_gc_content_url,
-    destfile = intergenic_gc_destfile,
-    mode = "wb"
-)
+   intergenic_gc_content_url <-
+       paste0(
+           "https://www.dropbox.com/scl/fi/ik5z5etbr63nnv43jna8c/GRCh38.",
+           "intergenic.GC.content.RDS?rlkey=kxrn6ixdnvhpba9h7w2r265xp&dl=1"
+       )
+   intergenic_gc_destfile <- file.path(
+       tmp_dir,
+       "GRCh38.intergenic.GC.content.RDS"
+   )
+   download.file(
+       url = intergenic_gc_content_url,
+       destfile = intergenic_gc_destfile,
+       mode = "wb"
+   )
 
-## load the salmon_quant object
-intergenic_gc <- readRDS(intergenic_gc_destfile)
-gc_bias_corrected_count <-
-    gc_bias_correction(
-        salmon_res = salmon_quant,
-        gene_gc = gene_gc,
-        intergenic_counts =
-            counts_summary$intergenic_region$counts,
-        intergenic_gc = intergenic_gc,
-        plot = FALSE
-    )
+   ## load the salmon_quant object
+   intergenic_gc <- readRDS(intergenic_gc_destfile)
+   gc_bias_corrected_count <-
+       gc_bias_correction(
+           salmon_res = salmon_quant,
+           gene_gc = gene_gc,
+           intergenic_counts =
+               counts_summary$intergenic_region$counts,
+           intergenic_gc = intergenic_gc,
+           plot = FALSE
+       )
+}
 }

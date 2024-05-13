@@ -104,8 +104,8 @@ wrappers, please refer to their function documentation.
 
 ```{r loadpackage}
 suppressPackageStartupMessages({
-    #library("CleanUpRNAseq")
-    devtools::load_all("./")
+    library("CleanUpRNAseq")
+    #devtools::load_all("./")
     library("ggplotify")
     library("R.utils")
     library("patchwork")

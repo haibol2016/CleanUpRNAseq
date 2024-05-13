@@ -11,6 +11,8 @@
 #'   sample names and experimental groups for each sample, respectively. The
 #'   order of the sample name in the rows must match those in the count table
 #'   specified by `counts`.
+#' @param silent A logical(1), specify whether to draw the plot. It is useful
+#'   to set it to FALSE useful when using the gtable output.
 #' @return A list of a ggplot object and a [gtable::gtable()] object.
 #' \describe{
 #'   \item{pca}{A *ggplot* object containing the PCA score plot showing sample
@@ -57,7 +59,8 @@ exploratory_analysis <-
              metadata = data.frame(
                  sample_name = vector(mode = "character"),
                  group = vector(mode = "character")
-             )) {
+             ),
+             silent = FALSE) {
         if (!is.matrix(counts) && !is.data.frame(counts)) {
             stop("A count table must be provied as a matrix or data frame")
         }
@@ -161,6 +164,7 @@ exploratory_analysis <-
                 annotation_colors = anno_col,
                 silent = TRUE,
                 fontsize = 6,
+                silent = silent,
                 main = "Heatmap showing sample distances",
                 color = colors
             )

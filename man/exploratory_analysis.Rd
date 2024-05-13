@@ -7,7 +7,8 @@
 exploratory_analysis(
   counts = NULL,
   metadata = data.frame(sample_name = vector(mode = "character"), group = vector(mode =
-    "character"))
+    "character")),
+  silent = FALSE
 )
 }
 \arguments{
@@ -19,6 +20,9 @@ for sample names. If values are not integers, it will be rounded.}
 sample names and experimental groups for each sample, respectively. The
 order of the sample name in the rows must match those in the count table
 specified by \code{counts}.}
+
+\item{silent}{A logical(1), specify whether to draw the plot. It is useful
+to set it to FALSE useful when using the gtable output.}
 }
 \value{
 A list of a ggplot object and a \code{\link[gtable:gtable]{gtable::gtable()}} object.

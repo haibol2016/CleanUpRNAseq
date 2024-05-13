@@ -330,8 +330,9 @@ create_diagnostic_plot <-
             height = 3,
             width = 5
         )
-        p1_featurecount_read_assignment
+        plot(p1_featurecount_read_assignment)
         dev.off()
+
 
         # check read mapping rate across different genomic features:
         # genes, introns, exons, intergenic regions, rRNA,
@@ -349,7 +350,7 @@ create_diagnostic_plot <-
             height = 6,
             width = 8
         )
-        p2_mapping_rate_by_features_IR_rate$p
+        plot(p2_mapping_rate_by_features_IR_rate$p)
         dev.off()
 
         ## add IR_rate to metadata
@@ -391,10 +392,10 @@ create_diagnostic_plot <-
             height = 9,
             width = 6
         )
-        wrap_plots(p4_expression_distribution,
+        plot(wrap_plots(p4_expression_distribution,
             nrow = 3,
             ncol = 1
-        )
+        ))
         dev.off()
 
 
@@ -412,7 +413,7 @@ create_diagnostic_plot <-
             height = 6,
             width = 8
         )
-        p5_percent_expressed_genes
+        plot(p5_percent_expressed_genes)
         dev.off()
 
         # check sample similarity and variation by hierarchical clustering
@@ -420,7 +421,8 @@ create_diagnostic_plot <-
         p6_pca_heatmap <-
             exploratory_analysis(
                 counts = salmon_summary$counts,
-                metadata = metadata
+                metadata = metadata,
+                silent = TRUE
             )
 
         pdf(
@@ -428,14 +430,14 @@ create_diagnostic_plot <-
             height = 6,
             width = 8
         )
-        p6_pca_heatmap$heatmap
+        plot(p6_pca_heatmap$heatmap$gtable)
         dev.off()
         pdf(
             file.path(out_dir, "Fig7.PCA.showing.sample.variability.pdf"),
             height = 6,
             width = 8
         )
-        p6_pca_heatmap$pca
+        plot(p6_pca_heatmap$pca)
         dev.off()
 
         diagnosis_res <-
