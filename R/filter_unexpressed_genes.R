@@ -286,7 +286,8 @@ filter_unexpressed_genes <-
         ## remove all-zeros genes from count table
         counts <- counts[rowSums(counts) != 0, ]
 
-        if (!all(sort(colnames(counts)) == sort(metadata$sample_name))) {
+        if (!all(sort(colnames(counts)) ==
+                 sort(as.character(metadata$sample_name)))) {
             stop(
                 "The column names of the raw count matrix DO NOT match the ",
                 "sample names in the metadata!"

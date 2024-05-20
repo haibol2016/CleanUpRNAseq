@@ -79,7 +79,8 @@ exploratory_analysis <-
         if (!is.numeric(counts)) {
             stop("The count table must be numeric.")
         }
-        if (!all(sort(colnames(counts)) == sort(metadata$sample_name))) {
+        if (!all(sort(colnames(counts)) ==
+                 sort(as.character(metadata$sample_name)))) {
             stop(
                 "colnames of the count table don't match the sample names",
                 "in the metadata."
@@ -107,7 +108,12 @@ exploratory_analysis <-
             maxit = 1000
         )
         ## exploratory analysis
-        vsd <- vst(dds, blind = TRUE)
+        if (nrow(counts) >= 1000) {
+            vsd <- vst(dds, blind = TRUE)
+        } else {
+            vsd <- varianceStabilizingTransformation(dds, blind = TRUE)
+        }
+
         sampleDists <- dist(t(assay(vsd)))
 
         ## Heatmap showing sample distances

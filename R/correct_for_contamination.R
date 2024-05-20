@@ -280,7 +280,7 @@ correct_for_contamination <-
                     data = metadata
                 )
 
-                if (!all(sort(metadata$sample_name) ==
+                if (!all(sort(as.character(metadata$sample_name)) ==
                         sort(colnames(salmon_summary$counts)))) {
                     stop(
                         "Sample names in metadata are not the same ",

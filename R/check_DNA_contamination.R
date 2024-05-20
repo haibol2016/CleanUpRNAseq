@@ -616,7 +616,7 @@ check_read_distribution <-
                 levels = levels,
                 labels = labels
             )
-        if (!all(sort(metadata$sample_name) ==
+        if (!all(sort(as.character(metadata$sample_name)) ==
             sort(unique(assigned_per_region$sample_name)))) {
             stop(
                 "sample names in metadata are not consistent with those in ",
@@ -850,7 +850,8 @@ check_expr_distribution <-
         if (!is.numeric(counts)) {
             stop("The count table must be numeric.")
         }
-        if (!all(sort(colnames(counts)) == sort(metadata$sample_name))) {
+        if (!all(sort(colnames(counts)) ==
+                 sort(as.character(metadata$sample_name)))) {
             stop(
                 "Column names of the raw count matrix DO NOT match ",
                 "sample names in the metadata!"
