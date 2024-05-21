@@ -60,10 +60,10 @@
 #'   provided in the data frame.
 #' @param stranded_metadata A data frame or a path to a tab-delimited
 #'   text file with column names: BAM_file, sample_name, and group. The
-#'   *salmon_quant_file_strand* and *salmon_quant_file_reverse_strand*column
+#'   *salmon_quant_file_strand* and *salmon_quant_file_opposite_strand*column
 #'   contains the full paths to *quant.sf* files for quantitation of gene
 #'   expression by Salmon pseudo-alignment with the library strandedness type
-#'   set to the true and reverse orientations. See Salmon's description of
+#'   set to the true and opposite orientations. See Salmon's description of
 #'   library type (<https://salmon.readthedocs.io/en/latest/library_type.html>)
 #'   for details. The *sample_name* columns contain the unique sample labels for
 #'   each sample. The order of the three columns doesn't matter.
@@ -178,7 +178,7 @@ correct_for_contamination <-
              stranded_metadata =
                  data.frame(
                      salmon_quant_file_strand = vector(mode = "character"),
-                     salmon_quant_file_reverse_strand =
+                     salmon_quant_file_opposite_strand =
                          vector(mode = "character"),
                      sample_name = vector(mode = "character")
                  ),
@@ -186,13 +186,14 @@ correct_for_contamination <-
         if (!is_stranded_library) {
             correction_method <- match.arg(correction_method)
             if (correction_method == "Global") {
-                corrected_matrix <-
+                corrected_counts <-
                     global_correction(
                         intergenic_featureCounts_res =
                             featurecounts_summary$intergenic_region,
                         salmon_res = salmon_summary,
                         lambda = 1
                     )
+                corrected_counts
             } else if (correction_method == "GC%") {
                 if (!is(ensdb_sqlite, "EnsDb") && !is.character(ensdb_sqlite)) {
                     stop("Please provide a single EnsDb object or a EnsDb ",

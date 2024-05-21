@@ -315,7 +315,6 @@ global_correction <- function(intergenic_featureCounts_res = NULL,
     # set negative values to 0
     counts <- ifelse(counts < 0, 0, counts)
     counts <- round(counts)
-    counts <- counts[rowSums(counts) != 0, ]
     counts
 }
 
