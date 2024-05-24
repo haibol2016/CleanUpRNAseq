@@ -1,26 +1,28 @@
 #' Correction for gDNA contamination in RNA-seq data
 #'
-#' Correction for gDNA contamination in RNA-seq data using the "GC%", "IR%" or
-#' "Global" method.
+#' Correction for gDNA contamination in stranded RNA-seq data based on the
+#' strandedness information or in the unstranded RNA-seq data using the "GC%",
+#' "IR%" or "Global" method.
 #'
 #' @param is_stranded_library A logical(1), specifying whether the RNA-seq
 #'   library is stranded or not.
 #' @param salmon_summary A list of matrices containing gene-level abundances,
-#'   counts,lengths, such as the output of the [salmon_res()] function. For
+#'   counts, lengths, such as the output of the [salmon_res()] function. For
 #'   more details, See [tximport::tximport()]. It can be an element named
 #'   *salmon_summary* of the list returned by the [create_diagnostic_plot()]
 #'   function.
 #' @param correction_method A character(1), specifying a method for correcting
-#'   for gDNA contamination. The options are "GC%", "Global", "IR%".
+#'   for gDNA contamination in unstranded RNA-seq data. The options are "GC%",
+#'   "Global", "IR%". This parameter is ignored for stranded RNA-seq data.
 #' @param featurecounts_summary It can be an element named
 #'   *featurecounts_summary* of the list returned by the
 #'   [create_diagnostic_plot()] function. It is only
 #'   needed for correcting for gDNA contamination in unstranded RNA-seq data
 #'   using the "Global" or the "GC%" method.
 #' @param saf_list A list of data frames containing annotation in the SAF
-#'   format. It can be an element named *saf_list* of the list returned by the
+#'   format. It can be an element named saf_list* of the list returned by the
 #'   [create_diagnostic_plot()] function. It is only needed for correcting for
-#'   gDNA contamination in unstranded RNA-seq data using the "GC%" method..
+#'   gDNA contamination in unstranded RNA-seq data using the "GC%" method.
 #' @param unstranded_metadata  A data frame, with column names: sample_name,
 #'   group, IR_rate (the percentages of reads mapping to the intergenic region
 #'   for all samples), batch if any, and other possible covariates for linear
@@ -59,21 +61,22 @@
 #'   chromosomes/scaffolds in the primary reference genome assembly should be
 #'   provided in the data frame.
 #' @param stranded_metadata A data frame or a path to a tab-delimited
-#'   text file with column names: BAM_file, sample_name, and group. The
-#'   *salmon_quant_file_strand* and *salmon_quant_file_opposite_strand*column
-#'   contains the full paths to *quant.sf* files for quantitation of gene
+#'   text file with column names: `salmon_quant_file_strand`,
+#'   `salmon_quant_file_opposite_strand`, `sample_name`, and `group`. The
+#'   `salmon_quant_file_strand` and `salmon_quant_file_opposite_strand` column
+#'   contains the full paths to `quant.sf` files for quantitation of gene
 #'   expression by Salmon pseudo-alignment with the library strandedness type
 #'   set to the true and opposite orientations. See Salmon's description of
 #'   library type (<https://salmon.readthedocs.io/en/latest/library_type.html>)
-#'   for details. The *sample_name* columns contain the unique sample labels for
-#'   each sample. The order of the three columns doesn't matter.
-#'   It is only needed for stranded RNA-seq data.
+#'   for details. The `sample_name` columns contain the unique sample labels
+#'   for each sample. The order of the three columns doesn't matter. It is only
+#'   needed for stranded RNA-seq data.
 #' @param ensdb_sqlite An EnsDb object or a character(1) vector, specifying a
 #'   path to an SQLite database for an object of the [ensembldb::EnsDb-class].
-#'   It can be an element named *ensdb_sqlite_file* of the list returned by the
-#'   [create_diagnostic_plot()] function. It is needed for the "GC%"
-#'   method-based correction for unstranded RNA-seq data and correction for
-#'   stranded RNA-seq data.
+#'   It can be an element named `ensdb_sqlite_file` of the list returned by the
+#'   [create_diagnostic_plot()] function. It is needed for the "GC%" method-
+#'   based correction for unstranded RNA-seq data and correction for stranded
+#'   RNA-seq data.
 #'
 #' @return For unstranded RNA-seq datat, it returns a gDNA contamination
 #'   corrected count matrix if the "GC%" or "Global" correction method is

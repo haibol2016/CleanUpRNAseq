@@ -31,13 +31,14 @@ correct_for_contamination(
 library is stranded or not.}
 
 \item{salmon_summary}{A list of matrices containing gene-level abundances,
-counts,lengths, such as the output of the \code{\link[=salmon_res]{salmon_res()}} function. For
+counts, lengths, such as the output of the \code{\link[=salmon_res]{salmon_res()}} function. For
 more details, See \code{\link[tximport:tximport]{tximport::tximport()}}. It can be an element named
 \emph{salmon_summary} of the list returned by the \code{\link[=create_diagnostic_plot]{create_diagnostic_plot()}}
 function.}
 
 \item{correction_method}{A character(1), specifying a method for correcting
-for gDNA contamination. The options are "GC\%", "Global", "IR\%".}
+for gDNA contamination in unstranded RNA-seq data. The options are "GC\%",
+"Global", "IR\%". This parameter is ignored for stranded RNA-seq data.}
 
 \item{featurecounts_summary}{It can be an element named
 \emph{featurecounts_summary} of the list returned by the
@@ -46,9 +47,9 @@ needed for correcting for gDNA contamination in unstranded RNA-seq data
 using the "Global" or the "GC\%" method.}
 
 \item{saf_list}{A list of data frames containing annotation in the SAF
-format. It can be an element named \emph{saf_list} of the list returned by the
+format. It can be an element named saf_list* of the list returned by the
 \code{\link[=create_diagnostic_plot]{create_diagnostic_plot()}} function. It is only needed for correcting for
-gDNA contamination in unstranded RNA-seq data using the "GC\%" method..}
+gDNA contamination in unstranded RNA-seq data using the "GC\%" method.}
 
 \item{unstranded_metadata}{A data frame, with column names: sample_name,
 group, IR_rate (the percentages of reads mapping to the intergenic region
@@ -95,22 +96,23 @@ chromosomes/scaffolds in the primary reference genome assembly should be
 provided in the data frame.}
 
 \item{stranded_metadata}{A data frame or a path to a tab-delimited
-text file with column names: BAM_file, sample_name, and group. The
-\emph{salmon_quant_file_strand} and \emph{salmon_quant_file_opposite_strand}column
-contains the full paths to \emph{quant.sf} files for quantitation of gene
+text file with column names: \code{salmon_quant_file_strand},
+\code{salmon_quant_file_opposite_strand}, \code{sample_name}, and \code{group}. The
+\code{salmon_quant_file_strand} and \code{salmon_quant_file_opposite_strand} column
+contains the full paths to \code{quant.sf} files for quantitation of gene
 expression by Salmon pseudo-alignment with the library strandedness type
 set to the true and opposite orientations. See Salmon's description of
 library type (\url{https://salmon.readthedocs.io/en/latest/library_type.html})
-for details. The \emph{sample_name} columns contain the unique sample labels for
-each sample. The order of the three columns doesn't matter.
-It is only needed for stranded RNA-seq data.}
+for details. The \code{sample_name} columns contain the unique sample labels
+for each sample. The order of the three columns doesn't matter. It is only
+needed for stranded RNA-seq data.}
 
 \item{ensdb_sqlite}{An EnsDb object or a character(1) vector, specifying a
 path to an SQLite database for an object of the \link[ensembldb:EnsDb-class]{ensembldb::EnsDb}.
-It can be an element named \emph{ensdb_sqlite_file} of the list returned by the
-\code{\link[=create_diagnostic_plot]{create_diagnostic_plot()}} function. It is needed for the "GC\%"
-method-based correction for unstranded RNA-seq data and correction for
-stranded RNA-seq data.}
+It can be an element named \code{ensdb_sqlite_file} of the list returned by the
+\code{\link[=create_diagnostic_plot]{create_diagnostic_plot()}} function. It is needed for the "GC\%" method-
+based correction for unstranded RNA-seq data and correction for stranded
+RNA-seq data.}
 }
 \value{
 For unstranded RNA-seq datat, it returns a gDNA contamination
@@ -120,8 +122,9 @@ For stranded RNA-seq data, it returns a gDNA contamination corrected
 count matrix.
 }
 \description{
-Correction for gDNA contamination in RNA-seq data using the "GC\%", "IR\%" or
-"Global" method.
+Correction for gDNA contamination in stranded RNA-seq data based on the
+strandedness information or in the unstranded RNA-seq data using the "GC\%",
+"IR\%" or "Global" method.
 }
 \examples{
 \dontrun{
