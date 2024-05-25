@@ -62,8 +62,8 @@
 #'   provided in the data frame.
 #' @param stranded_metadata A data frame or a path to a tab-delimited
 #'   text file with column names: `salmon_quant_file_strand`,
-#'   `salmon_quant_file_opposite_strand`, `sample_name`, and `group`. The
-#'   `salmon_quant_file_strand` and `salmon_quant_file_opposite_strand` column
+#'   `salmon_quant_file_reverse_strand`, `sample_name`, and `group`. The
+#'   `salmon_quant_file_strand` and `salmon_quant_file_reverse_strand` column
 #'   contains the full paths to `quant.sf` files for quantitation of gene
 #'   expression by Salmon pseudo-alignment with the library strandedness type
 #'   set to the true and opposite orientations. See Salmon's description of
@@ -181,7 +181,7 @@ correct_for_contamination <-
              stranded_metadata =
                  data.frame(
                      salmon_quant_file_strand = vector(mode = "character"),
-                     salmon_quant_file_opposite_strand =
+                     salmon_quant_file_reverse_strand =
                          vector(mode = "character"),
                      sample_name = vector(mode = "character")
                  ),

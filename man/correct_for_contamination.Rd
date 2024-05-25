@@ -21,7 +21,7 @@ correct_for_contamination(
   seqname_alias = data.frame(ucsc = paste0("chr", c(seq_len(22), "X", "Y", "M")), ensembl
     = c(seq_len(22), "X", "Y", "MT")),
   stranded_metadata = data.frame(salmon_quant_file_strand = vector(mode = "character"),
-    salmon_quant_file_opposite_strand = vector(mode = "character"), sample_name =
+    salmon_quant_file_reverse_strand = vector(mode = "character"), sample_name =
     vector(mode = "character")),
   ensdb_sqlite = NULL
 )
@@ -97,8 +97,8 @@ provided in the data frame.}
 
 \item{stranded_metadata}{A data frame or a path to a tab-delimited
 text file with column names: \code{salmon_quant_file_strand},
-\code{salmon_quant_file_opposite_strand}, \code{sample_name}, and \code{group}. The
-\code{salmon_quant_file_strand} and \code{salmon_quant_file_opposite_strand} column
+\code{salmon_quant_file_reverse_strand}, \code{sample_name}, and \code{group}. The
+\code{salmon_quant_file_strand} and \code{salmon_quant_file_reverse_strand} column
 contains the full paths to \code{quant.sf} files for quantitation of gene
 expression by Salmon pseudo-alignment with the library strandedness type
 set to the true and opposite orientations. See Salmon's description of
