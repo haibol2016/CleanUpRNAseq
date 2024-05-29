@@ -108,11 +108,14 @@ exploratory_analysis <-
             maxit = 1000
         )
         ## exploratory analysis
-        if (nrow(counts) >= 1000) {
-            vsd <- vst(dds, blind = TRUE)
-        } else {
-            vsd <- varianceStabilizingTransformation(dds, blind = TRUE)
-        }
+        vsd <- tryCatch({vst(dds, blind = TRUE)},
+                warning = function(w) {
+                            message("Less than 1000 rows in the count table!")
+                        },
+                 error = function(e) {
+                    varianceStabilizingTransformation(dds,
+                                                              blind = TRUE)
+                 })
 
         sampleDists <- dist(t(assay(vsd)))
 
