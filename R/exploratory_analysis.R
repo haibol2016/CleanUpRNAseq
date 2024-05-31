@@ -184,9 +184,15 @@ exploratory_analysis <-
             metadata = metadata
         )
 
+        ## remove genes with sd = 0 across samples
+        vsd_filter <- t(assay(vsd))
+        vsd_filter <-
+            vsd_filter[, unname(vapply(as.data.frame(vsd_filter), sd,
+                                       FUN.VALUE = numeric(1)))!= 0]
+
         ## PCA plot showing PC1 and PC2 only
         pca <-
-            prcomp(t(assay(vsd)),
+            prcomp(vsd_filter,
                 scale = TRUE,
                 center = TRUE,
                 retx = TRUE
