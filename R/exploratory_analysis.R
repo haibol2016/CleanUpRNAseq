@@ -29,6 +29,7 @@
 #' @importFrom SummarizedExperiment assay
 #' @import DESeq2 ggplot2
 #' @importFrom grDevices rainbow
+#' @importFrom stats sd
 #'
 #' @examples
 #' library(patchwork)
