@@ -48,8 +48,8 @@ library(patchwork)
 tmp_dir <- tempdir()
 ## download feaureCounts results
 count_url <- paste0(
-    "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-    "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+    "https://zenodo.org/records/11458839/files/",
+    "read_count_summary.RData?download=1"
 )
 download.file(
     url = count_url,

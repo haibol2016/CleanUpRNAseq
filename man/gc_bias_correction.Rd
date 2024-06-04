@@ -54,8 +54,8 @@ if (interactive()) {
    tmp_dir <- tempdir()
    ## download feaureCounts results
    count_url <- paste0(
-       "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-       "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+       "https://zenodo.org/records/11458839/files/",
+       "read_count_summary.RData?download=1"
    )
    download.file(
        url = count_url,
@@ -66,8 +66,8 @@ if (interactive()) {
 
    # download the Salmon quantification results
    salmon_url <- paste0(
-       "https://drive.google.com/",
-       "uc?export=download&id=13vsobXnENoiYOBo-Vf_e_00xbR8ekc4Z"
+       "https://zenodo.org/records/11458839/files/",
+       "salmon_quant_summary.RData?download=1"
    )
    salmon_destfile <- file.path(tmp_dir, "salmon_quant_summary.RData")
    download.file(url = salmon_url,
@@ -79,8 +79,8 @@ if (interactive()) {
 
    gene_gc_content_url <-
        paste0(
-           "https://www.dropbox.com/scl/fi/taoj18w5t4up22d04xihk/GRCh38.gene.",
-           "exon.collapsed.GC.content.RDS?rlkey=zj31ul2slckrn5zm8vq6tgq31&dl=1"
+           "https://zenodo.org/records/11458839/files/",
+           "GRCh38.gene.exon.collapsed.GC.content.RDS?download=1"
        )
    gene_gc_destfile <- file.path(tmp_dir,
                                  "GRCh38.gene.exon.collapsed.GC.content.RDS")
@@ -93,8 +93,8 @@ if (interactive()) {
 
    intergenic_gc_content_url <-
        paste0(
-           "https://www.dropbox.com/scl/fi/ik5z5etbr63nnv43jna8c/GRCh38.",
-           "intergenic.GC.content.RDS?rlkey=kxrn6ixdnvhpba9h7w2r265xp&dl=1"
+           "https://zenodo.org/records/11458839/files/",
+           "GRCh38.intergenic.GC.content.RDS?download=1"
        )
    intergenic_gc_destfile <- file.path(
        tmp_dir,

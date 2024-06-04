@@ -38,8 +38,8 @@ tmp_dir <- tempdir()
 options(timeout = max(3000, getOption("timeout")))
 ## download feaureCounts results
 count_url <- paste0(
-    "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-    "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+    "https://zenodo.org/records/11458839/files/",
+    "read_count_summary.RData?download=1"
 )
 download.file(
     url = count_url,
@@ -50,8 +50,8 @@ load(file.path(tmp_dir, "read_count_summary.RData"))
 
 # download the Salmon quantification results
 salmon_url <- paste0(
-    "https://drive.google.com/",
-    "uc?export=download&id=13vsobXnENoiYOBo-Vf_e_00xbR8ekc4Z"
+    "https://zenodo.org/records/11458839/files/",
+    "salmon_quant_summary.RData?download=1"
 )
 destfile <- file.path(tmp_dir, "salmon_quant_summary.RData")
 download.file(

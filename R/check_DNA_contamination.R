@@ -234,8 +234,8 @@ get_feature_saf <- function(ensdb_sqlite = NULL,
 #' gunzip(file.path(tmp_dir, gtf), remove = TRUE)
 #'
 #' # download the SAF file
-#' saf_url <- paste0("https://drive.google.com/uc?export=download&",
-#' "id=1jbYiGY44Js2Y58A7nDl85dwRf4Hq0MHm")
+#' saf_url <- paste0("https://zenodo.org/records/11458839/files/",
+#'                   "hs_saf_list.RData?download=1")
 #' download.file(
 #'     url = saf_url,
 #'     destfile = file.path(tmp_dir, "hs_saf_list.RData"),
@@ -405,8 +405,8 @@ summarize_reads <- function(metadata =
 #' options(timeout = max(3000, getOption("timeout")))
 #' ## download feaureCounts results
 #' count_url <- paste0(
-#'     "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-#'     "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+#'     "https://zenodo.org/records/11458839/files/",
+#'     "read_count_summary.RData?download=1"
 #' )
 #' download.file(
 #'     url = count_url,
@@ -522,8 +522,8 @@ check_read_assignment_stat <- function(assignment_stat = NULL) {
 #' tmp_dir <- tempdir()
 #' ## download feaureCounts results
 #' count_url <- paste0(
-#'     "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-#'     "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+#'     "https://zenodo.org/records/11458839/files/",
+#'     "read_count_summary.RData?download=1"
 #' )
 #' download.file(
 #'     url = count_url,
@@ -698,8 +698,8 @@ check_read_distribution <-
 #' tmp_dir <- tempdir()
 #' ## download feaureCounts results
 #' count_url <- paste0(
-#'     "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-#'     "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+#'     "https://zenodo.org/records/11458839/files/",
+#'     "read_count_summary.RData?download=1"
 #' )
 #' download.file(
 #'     url = count_url,
@@ -802,8 +802,8 @@ check_sample_correlation <- function(counts = NULL) {
 #' tmp_dir <- tempdir()
 #' ## download feaureCounts results
 #' count_url <- paste0(
-#'     "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-#'     "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+#'     "https://zenodo.org/records/11458839/files/",
+#'     "read_count_summary.RData?download=1"
 #' )
 #' download.file(
 #'     url = count_url,
@@ -1090,8 +1090,8 @@ check_expr_distribution <-
 #' tmp_dir <- tempdir()
 #' ## download feaureCounts results
 #' count_url <- paste0(
-#'     "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-#'     "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+#'     "https://zenodo.org/records/11458839/files/",
+#'     "read_count_summary.RData?download=1"
 #' )
 #' download.file(
 #'     url = count_url,

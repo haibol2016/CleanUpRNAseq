@@ -69,8 +69,8 @@ metadata <- data.frame(
 # download the EnsDb SQLite database: GRCh38.V110.ensdb.sqlite.zip
 tmp_dir <- tempdir()
 ensdb_url <- paste0(
-    "https://www.dropbox.com/scl/fi/5i8mwuxe7mcbxz4qvf43g/",
-    "GRCh38.V110.ensdb.sqlite.zip?rlkey=udcpv8yafbdujvom628u6aucb&dl=1"
+    "https://zenodo.org/records/11458839/files/",
+    "GRCh38.V110.ensdb.sqlite.zip?download=1"
 )
 download.file(
     url = ensdb_url,

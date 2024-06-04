@@ -30,8 +30,8 @@
 #' tmp_dir <- tempdir()
 #' ## download feaureCounts results
 #' count_url <- paste0(
-#'     "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-#'     "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+#'     "https://zenodo.org/records/11458839/files/",
+#'     "read_count_summary.RData?download=1"
 #' )
 #' download.file(
 #'     url = count_url,
@@ -42,8 +42,8 @@
 #'
 #' # download the EnsDb SQLite database
 #' ensdb_url <- paste0(
-#'     "https://www.dropbox.com/scl/fi/5i8mwuxe7mcbxz4qvf43g/",
-#'     "GRCh38.V110.ensdb.sqlite.zip?rlkey=udcpv8yafbdujvom628u6aucb&dl=1"
+#'     "https://zenodo.org/records/11458839/files/",
+#'     "GRCh38.V110.ensdb.sqlite.zip?download=1"
 #' )
 #' download.file(
 #'     url = ensdb_url,
@@ -175,8 +175,8 @@ get_unexpressed_spliced_genes <- function(ensdb_sqlite = NULL,
 #' options(timeout = max(3000, getOption("timeout")))
 #' ## download feaureCounts results
 #' count_url <- paste0(
-#'     "https://www.dropbox.com/scl/fi/lyvh6bsljnqxtq85nnugq/",
-#'     "read_count_summary.RData?rlkey=e0tmpehpxtnr1fdx4fz0h8sa0&dl=1"
+#'     "https://zenodo.org/records/11458839/files/",
+#'     "read_count_summary.RData?download=1"
 #' )
 #' download.file(
 #'     url = count_url,
@@ -187,8 +187,8 @@ get_unexpressed_spliced_genes <- function(ensdb_sqlite = NULL,
 #'
 #' # download the EnsDb SQLite database
 #' ensdb_url <- paste0(
-#'     "https://www.dropbox.com/scl/fi/5i8mwuxe7mcbxz4qvf43g/",
-#'     "GRCh38.V110.ensdb.sqlite.zip?rlkey=udcpv8yafbdujvom628u6aucb&dl=1"
+#'     "https://zenodo.org/records/11458839/files/",
+#'     "GRCh38.V110.ensdb.sqlite.zip?download=1"
 #' )
 #' download.file(
 #'     url = ensdb_url,
@@ -211,8 +211,8 @@ get_unexpressed_spliced_genes <- function(ensdb_sqlite = NULL,
 #'
 #' # download the Salmon quantification results
 #' salmon_url <-
-#'     paste0("https://drive.google.com/uc?export=download&id=",
-#'     "13vsobXnENoiYOBo-Vf_e_00xbR8ekc4Z")
+#'     paste0("https://zenodo.org/records/11458839/files/",
+#'     "salmon_quant_summary.RData?download=1")
 #' destfile <- file.path(tmp_dir, "salmon_quant_summary.RData")
 #' download.file(
 #'     url = salmon_url,

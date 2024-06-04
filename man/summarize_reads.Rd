@@ -124,8 +124,8 @@ download.file(
 gunzip(file.path(tmp_dir, gtf), remove = TRUE)
 
 # download the SAF file
-saf_url <- paste0("https://drive.google.com/uc?export=download&",
-"id=1jbYiGY44Js2Y58A7nDl85dwRf4Hq0MHm")
+saf_url <- paste0("https://zenodo.org/records/11458839/files/",
+                  "hs_saf_list.RData?download=1")
 download.file(
     url = saf_url,
     destfile = file.path(tmp_dir, "hs_saf_list.RData"),
