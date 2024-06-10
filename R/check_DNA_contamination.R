@@ -365,7 +365,6 @@ summarize_reads <- function(metadata =
                 reportReads = NULL,
                 reportReadsPath = NULL,
                 # miscellaneous
-                maxMOp = 10,
                 tmpDir = ".",
                 verbose = verbose
             )

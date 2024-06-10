@@ -132,6 +132,7 @@ human transcriptome has been used for read mapping by STAR and Salmon to
 quantify gene expression of the example RNA-seq data.
 
 ```{r createensdb}
+options(timeout = max(3000, getOption("timeout")))
 tmp_dir <- tempdir()
 gtf_url <- paste0(
     "https://ftp.ensembl.org/pub/release-110/gtf/",
