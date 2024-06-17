@@ -351,6 +351,7 @@ global_correction <- function(intergenic_featureCounts_res = NULL,
 #' @importFrom ensembldb transcripts
 #'
 #' @examples
+#' options(timeout = max(3000, getOption("timeout")))
 #' ## using made-up salmon quant.sf files, NOT RUN. For real situation,
 #' ## replace the quant.sf files and sample names with real ones.
 #' quant_files <-

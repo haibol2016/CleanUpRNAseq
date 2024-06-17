@@ -519,6 +519,7 @@ check_read_assignment_stat <- function(assignment_stat = NULL) {
 #' @importFrom stats cor dist median prcomp
 #' @examples
 #' tmp_dir <- tempdir()
+#' options(timeout = max(3000, getOption("timeout")))
 #' ## download feaureCounts results
 #' count_url <- paste0(
 #'     "https://zenodo.org/records/11458839/files/",
@@ -695,6 +696,7 @@ check_read_distribution <-
 #' @importFrom methods is
 #' @examples
 #' tmp_dir <- tempdir()
+#' options(timeout = max(3000, getOption("timeout")))
 #' ## download feaureCounts results
 #' count_url <- paste0(
 #'     "https://zenodo.org/records/11458839/files/",
@@ -799,6 +801,7 @@ check_sample_correlation <- function(counts = NULL) {
 #' @examples
 #' library(patchwork)
 #' tmp_dir <- tempdir()
+#' options(timeout = max(3000, getOption("timeout")))
 #' ## download feaureCounts results
 #' count_url <- paste0(
 #'     "https://zenodo.org/records/11458839/files/",
@@ -1087,6 +1090,7 @@ check_expr_distribution <-
 #' @export
 #' @examples
 #' tmp_dir <- tempdir()
+#' options(timeout = max(3000, getOption("timeout")))
 #' ## download feaureCounts results
 #' count_url <- paste0(
 #'     "https://zenodo.org/records/11458839/files/",
