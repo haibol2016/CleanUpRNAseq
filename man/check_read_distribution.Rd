@@ -35,6 +35,7 @@ genomic features.
 }
 \examples{
 tmp_dir <- tempdir()
+options(timeout = max(3000, getOption("timeout")))
 ## download feaureCounts results
 count_url <- paste0(
     "https://zenodo.org/records/11458839/files/",

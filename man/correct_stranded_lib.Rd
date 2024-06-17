@@ -43,6 +43,7 @@ Correct for gDNA contamination in stranded libraries based on Salmon
 quantitation using the real and opposite library strandedness information
 }
 \examples{
+options(timeout = max(3000, getOption("timeout")))
 ## using made-up salmon quant.sf files, NOT RUN. For real situation,
 ## replace the quant.sf files and sample names with real ones.
 quant_files <-
