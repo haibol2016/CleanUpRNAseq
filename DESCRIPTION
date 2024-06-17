@@ -2,7 +2,7 @@ Package: CleanUpRNAseq
 Type: Package
 Title: CleanUpRNAseq detects and corrects for genomic DNA contamination
        in RNA-seq data
-Version: 0.99.2
+Version: 0.99.3
 Authors@R: c(person("Haibo", "Liu", 
              role = c("aut", "cre"),
              comment=c(ORCID="0000-0002-4213-2883"),
@@ -28,7 +28,7 @@ License: GPL-3
 Imports: ggplot2, plyranges, DESeq2, Rsamtools, Rsubread, pheatmap, reshape2,
          GenomicRanges, edgeR, ensembldb, ggrepel, tximport, utils, magrittr,  
          grDevices, stats, graphics, Biostrings,SummarizedExperiment, methods, 
-         devtools, BSgenome,qsmooth, AnnotationFilter, patchwork,
+         devtools, BSgenome,qsmooth, AnnotationFilter, patchwork, KernSmooth,
          RColorBrewer, GenomeInfoDb, BiocGenerics, limma
 Depends: R (>= 4.0.0)
 Suggests: BiocManager, rmarkdown, RUnit, knitr, EnsDb.Hsapiens.v86, ggplotify,
