@@ -17,8 +17,6 @@ package: "CleanUpRNAseq"
 output:
   BiocStyle::html_document:
     toc_float: true
-    pandoc_args: "--citeproc"
-  BiocStyle::pdf_document: default
 link-citations: yes
 bibliography: bibliography.bib
 abstract: |
