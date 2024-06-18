@@ -226,21 +226,21 @@ get_feature_saf <- function(ensdb_sqlite = NULL,
 #' )
 #' gtf <- basename(gtf_url)
 #' tmp_dir <- tempdir()
-#' download.file(
+#' retry_download({download.file(
 #'     url = gtf_url,
 #'     destfile = file.path(tmp_dir, gtf),
 #'     mode = "wb"
-#' )
+#' )})
 #' gunzip(file.path(tmp_dir, gtf), remove = TRUE)
 #'
 #' # download the SAF file
 #' saf_url <- paste0("https://zenodo.org/records/11458839/files/",
 #'                   "hs_saf_list.RData?download=1")
-#' download.file(
+#' retry_download({download.file(
 #'     url = saf_url,
 #'     destfile = file.path(tmp_dir, "hs_saf_list.RData"),
 #'     mode = "wb"
-#' )
+#' )})
 #' load(file.path(tmp_dir, "hs_saf_list.RData"))
 #'
 #' counts_list <- summarize_reads(
@@ -407,11 +407,11 @@ summarize_reads <- function(metadata =
 #'     "https://zenodo.org/records/11458839/files/",
 #'     "read_count_summary.RData?download=1"
 #' )
-#' download.file(
+#' retry_download({download.file(
 #'     url = count_url,
 #'     destfile = file.path(tmp_dir, "read_count_summary.RData"),
 #'     mode = "wb"
-#' )
+#' )})
 #' load(file.path(tmp_dir, "read_count_summary.RData"))
 #'
 #' p <- check_read_assignment_stat(
@@ -525,11 +525,11 @@ check_read_assignment_stat <- function(assignment_stat = NULL) {
 #'     "https://zenodo.org/records/11458839/files/",
 #'     "read_count_summary.RData?download=1"
 #' )
-#' download.file(
+#' retry_download({download.file(
 #'     url = count_url,
 #'     destfile = file.path(tmp_dir, "read_count_summary.RData"),
 #'     mode = "wb"
-#' )
+#' )})
 #' load(file.path(tmp_dir, "read_count_summary.RData"))
 #' metadata <- counts_summary$metadata
 #' counts_summary$metadata <- NULL
@@ -704,11 +704,11 @@ check_read_distribution <-
 #'     "https://zenodo.org/records/11458839/files/",
 #'     "read_count_summary.RData?download=1"
 #' )
-#' download.file(
+#' retry_download({download.file(
 #'     url = count_url,
 #'     destfile = file.path(tmp_dir, "read_count_summary.RData"),
 #'     mode = "wb"
-#' )
+#' )})
 #' load(file.path(tmp_dir, "read_count_summary.RData"))
 #'
 #' check_sample_correlation(counts = counts_summary$gtf$counts)
@@ -809,11 +809,11 @@ check_sample_correlation <- function(counts = NULL) {
 #'     "https://zenodo.org/records/11458839/files/",
 #'     "read_count_summary.RData?download=1"
 #' )
-#' download.file(
+#' retry_download({download.file(
 #'     url = count_url,
 #'     destfile = file.path(tmp_dir, "read_count_summary.RData"),
 #'     mode = "wb"
-#' )
+#' )})
 #' load(file.path(tmp_dir, "read_count_summary.RData"))
 #' metadata <- counts_summary$metadata
 #' metadata$group <- gsub("CD1A\\(-\\)", "CD1A_N", metadata$group)
@@ -1098,11 +1098,11 @@ check_expr_distribution <-
 #'     "https://zenodo.org/records/11458839/files/",
 #'     "read_count_summary.RData?download=1"
 #' )
-#' download.file(
+#' retry_download({download.file(
 #'     url = count_url,
 #'     destfile = file.path(tmp_dir, "read_count_summary.RData"),
 #'     mode = "wb"
-#' )
+#' )})
 #' load(file.path(tmp_dir, "read_count_summary.RData"))
 #'
 #' p <- check_expressed_gene_percentage(
@@ -1341,4 +1341,51 @@ granges_to_saf <- function(granges) {
     saf_colnames <- c("GeneID", "Chr", "Start", "End", "Strand")
     saf <- saf[, saf_colnames]
     saf
+}
+
+
+#' Download files via HTTP with retry if failure occurs
+#'
+#' @details This function is adopted from David Weber's post on the
+#' StackOverflow with modification:
+#' https://stackoverflow.com/questions/63340463/download-files-until-it-works.
+#'
+#' @param expr A R expression using [utils::download.file()] to download a file.
+#' @param isError A function to determine if a *try-error* is returned
+#' @param maxErrors An integer(1), specifying the maximal number of tries before
+#'   stopping retry.
+#' @param sleep A numeric(1), specifying the time period in second to wait before
+#'   retry.
+#' @return 0 if success, otherwise a *try-error*.
+#' @export
+#'
+#' @examples
+#' #' tmp_dir <- tempdir()
+#' options(timeout = max(3000, getOption("timeout")))
+#' ## download feaureCounts results
+#' count_url <- paste0(
+#'     "https://zenodo.org/records/11458839/files/",
+#'     "read_count_summary.RData?download=1"
+#' )
+#' retry_download({download.file(
+#'     url = count_url,
+#'     destfile = file.path(tmp_dir, "read_count_summary.RData"),
+#'     mode = "wb"
+#' )})
+
+retry_download <- function(expr,
+                           isError = function(x) {"try-error" %in% class(x)},
+                           maxErrors = 10, sleep = 5) {
+    attempts <- 0
+    retval <- try(eval(expr))
+    while (isError(retval)) {
+        attempts <- attempts + 1
+        if (attempts >= maxErrors) {
+            stop("Already tried too many times. ",
+                 "The network is too busy to download the file!")
+        }
+        if (sleep > 0) Sys.sleep(sleep)
+        retval <- try(eval(expr))
+    }
+    invisible(retval)
 }

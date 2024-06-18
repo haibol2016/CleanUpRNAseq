@@ -388,7 +388,6 @@ generate_seed_file <-
 #'   of a BSgenome package is created.
 #'
 #' @return A BSgenome package name
-#' @importFrom devtools check build install
 #' @importFrom BSgenomeForge forgeBSgenomeDataPkg
 #' @export
 #'
@@ -493,8 +492,6 @@ forge_BSgenome <-
 #'
 #' @return A BSgenome package name. Users have to install the package
 #'   to use it.
-#' @importFrom devtools check build install
-#' @importFrom BSgenome forgeBSgenomeDataPkg
 #' @export
 #'
 #' @examples

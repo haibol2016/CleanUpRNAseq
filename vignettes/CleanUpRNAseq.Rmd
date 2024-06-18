@@ -140,11 +140,11 @@ gtf <- basename(gtf_url)
 gtf <- file.path(tmp_dir, gtf)
 
 if (!file.exists(gtf)) {
-    download.file(
+    retry_download({download.file(
         url = gtf_url,
         destfile = gtf,
         mode = "wb"
-    )
+    )})
 }
 
 hs_ensdb_sqlite <- make_ensdb(
@@ -230,11 +230,11 @@ count_url <- paste0(
     "https://zenodo.org/records/11458839/files/",
     "read_count_summary.RData?download=1"
 )
-download.file(
+retry_download({download.file(
     url = count_url,
     destfile = file.path(tmp_dir, "read_count_summary.RData"),
     mode = "wb"
-)
+)})
 load(file.path(tmp_dir, "read_count_summary.RData"))
 
 
@@ -279,11 +279,11 @@ salmon_url <-
     paste0("https://zenodo.org/records/11458839/files/",
            "salmon_quant_summary.RData?download=1")
 destfile <- file.path(tmp_dir, "salmon_quant_summary.RData")
-download.file(
+retry_download({download.file(
     url = salmon_url,
     destfile = destfile,
     mode = "wb"
-)
+)})
 
 ## load the salmon_quant object
 load(destfile)

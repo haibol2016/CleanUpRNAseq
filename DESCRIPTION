@@ -2,7 +2,7 @@ Package: CleanUpRNAseq
 Type: Package
 Title: CleanUpRNAseq detects and corrects for genomic DNA contamination
        in RNA-seq data
-Version: 0.99.7
+Version: 0.99.9
 Authors@R: c(person("Haibo", "Liu", 
              role = c("aut", "cre"),
              comment=c(ORCID="0000-0002-4213-2883"),
@@ -28,11 +28,11 @@ License: GPL-3
 Imports: ggplot2, plyranges, DESeq2, Rsamtools, Rsubread, pheatmap, reshape2,
          GenomicRanges, edgeR, ensembldb, ggrepel, tximport, utils, magrittr,  
          grDevices, stats, graphics, Biostrings,SummarizedExperiment, methods, 
-         devtools, BSgenome,qsmooth, AnnotationFilter, patchwork, KernSmooth,
-         RColorBrewer, GenomeInfoDb, BiocGenerics, limma,BSgenomeForge
+         BSgenome, qsmooth, AnnotationFilter, patchwork, KernSmooth,
+         RColorBrewer, GenomeInfoDb, BiocGenerics, limma, BSgenomeForge
 Depends: R (>= 4.0.0)
-Suggests: BiocManager, rmarkdown, RUnit, knitr, EnsDb.Hsapiens.v86, ggplotify,
-          BiocStyle, R.utils, AnnotationHub, BSgenome.Hsapiens.UCSC.hg38,
+Suggests: BiocManager, rmarkdown, knitr, EnsDb.Hsapiens.v86, ggplotify,
+          BiocStyle, R.utils, AnnotationHub, BSgenome.Hsapiens.UCSC.hg38
 VignetteBuilder: knitr
 RoxygenNote: 7.3.1
 Roxygen: list(markdown = TRUE)

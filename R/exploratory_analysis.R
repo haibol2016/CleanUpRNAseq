@@ -40,11 +40,11 @@
 #'     "https://zenodo.org/records/11458839/files/",
 #'     "read_count_summary.RData?download=1"
 #' )
-#' download.file(
+#' retry_download({download.file(
 #'     url = count_url,
 #'     destfile = file.path(tmp_dir, "read_count_summary.RData"),
 #'     mode = "wb"
-#' )
+#' )})
 #' load(file.path(tmp_dir, "read_count_summary.RData"))
 #'
 #' metadata <- counts_summary$metadata

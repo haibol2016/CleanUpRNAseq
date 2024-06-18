@@ -57,11 +57,11 @@ if (interactive()) {
        "https://zenodo.org/records/11458839/files/",
        "read_count_summary.RData?download=1"
    )
-   download.file(
+   retry_download({download.file(
        url = count_url,
        destfile = file.path(tmp_dir, "read_count_summary.RData"),
        mode = "wb"
-   )
+   )})
    load(file.path(tmp_dir, "read_count_summary.RData"))
 
    # download the Salmon quantification results
@@ -70,9 +70,9 @@ if (interactive()) {
        "salmon_quant_summary.RData?download=1"
    )
    salmon_destfile <- file.path(tmp_dir, "salmon_quant_summary.RData")
-   download.file(url = salmon_url,
+   retry_download{(download.file(url = salmon_url,
                  destfile = salmon_destfile,
-                 mode = "wb")
+                 mode = "wb")})
 
    ## load the salmon_quant object
    load(salmon_destfile)
@@ -83,10 +83,10 @@ if (interactive()) {
            "GRCh38.gene.exon.collapsed.GC.content.RDS?download=1"
        )
    gene_gc_destfile <- file.path(tmp_dir,
-                                 "GRCh38.gene.exon.collapsed.GC.content.RDS")
-   download.file(url = gene_gc_content_url,
+                     "GRCh38.gene.exon.collapsed.GC.content.RDS")
+   retry_download({download.file(url = gene_gc_content_url,
                  destfile = gene_gc_destfile,
-                 mode = "wb")
+                 mode = "wb")})
 
    ## load the gene_ object
    gene_gc <- readRDS(gene_gc_destfile)
@@ -100,11 +100,11 @@ if (interactive()) {
        tmp_dir,
        "GRCh38.intergenic.GC.content.RDS"
    )
-   download.file(
+   retry_download({download.file(
        url = intergenic_gc_content_url,
        destfile = intergenic_gc_destfile,
        mode = "wb"
-   )
+   )})
 
    ## load the salmon_quant object
    intergenic_gc <- readRDS(intergenic_gc_destfile)

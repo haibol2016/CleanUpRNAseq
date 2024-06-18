@@ -67,11 +67,11 @@ count_url <- paste0(
     "https://zenodo.org/records/11458839/files/",
     "read_count_summary.RData?download=1"
 )
-download.file(
+retry_download({download.file(
     url = count_url,
     destfile = file.path(tmp_dir, "read_count_summary.RData"),
     mode = "wb"
-)
+)})
 load(file.path(tmp_dir, "read_count_summary.RData"))
 
 # download the EnsDb SQLite database
@@ -79,11 +79,11 @@ ensdb_url <- paste0(
     "https://zenodo.org/records/11458839/files/",
     "GRCh38.V110.ensdb.sqlite.zip?download=1"
 )
-download.file(
+retry_download({download.file(
     url = ensdb_url,
     destfile = file.path(tmp_dir, "GRCh38.V110.ensdb.sqlite.zip"),
     mode = "wb"
-)
+)})
 unzip(file.path(tmp_dir, "GRCh38.V110.ensdb.sqlite.zip"),
     exdir = tmp_dir
 )
@@ -103,11 +103,11 @@ salmon_url <-
     paste0("https://zenodo.org/records/11458839/files/",
     "salmon_quant_summary.RData?download=1")
 destfile <- file.path(tmp_dir, "salmon_quant_summary.RData")
-download.file(
+retry_download({download.file(
     url = salmon_url,
     destfile = destfile,
     mode = "wb"
-)
+)})
 
 ## load the salmon_quant object
 load(destfile)

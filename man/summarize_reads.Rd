@@ -116,21 +116,21 @@ gtf_url <- paste0(
 )
 gtf <- basename(gtf_url)
 tmp_dir <- tempdir()
-download.file(
+retry_download({download.file(
     url = gtf_url,
     destfile = file.path(tmp_dir, gtf),
     mode = "wb"
-)
+)})
 gunzip(file.path(tmp_dir, gtf), remove = TRUE)
 
 # download the SAF file
 saf_url <- paste0("https://zenodo.org/records/11458839/files/",
                   "hs_saf_list.RData?download=1")
-download.file(
+retry_download({download.file(
     url = saf_url,
     destfile = file.path(tmp_dir, "hs_saf_list.RData"),
     mode = "wb"
-)
+)})
 load(file.path(tmp_dir, "hs_saf_list.RData"))
 
 counts_list <- summarize_reads(

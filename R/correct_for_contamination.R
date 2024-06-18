@@ -101,11 +101,11 @@
 #' )
 #' gtf <- basename(gtf_url)
 #' tmp_dir <- tempdir()
-#' download.file(
+#' retry_download({download.file(
 #'     url = gtf_url,
 #'     destfile = file.path(tmp_dir, gtf),
 #'     mode = "wb"
-#' )
+#' )})
 #' gtf <- file.path(tmp_dir, gtf)
 #'
 #' diagnosis_res <-
