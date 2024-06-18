@@ -1,18 +1,8 @@
-#' A package for detecting and correcting for DNA contamination in RNA-seq data
-#'
-#' The CleanUpRNAseq package provides two categories of functions for detecting
-#' DNA contamination and correcting for contamination from RNA-seq count data
-#'
-#' @section functions for detecting DNA contamination: check_expr_distribution,
-#' ccheck_expressed_gene_percentage, check_read_distribution,
-#' check_sample_correlation, exploratory_analysis, summarize_reads,
-#' get_feature_saf, granges_to_saf, make_ensdb
-#' @section functions for correcting for DNA contamination: global_correction,
-#' filter_unexpressed_genes, get_unexpressed_spliced_genes, salmon_res
+#' @keywords internal
+"_PACKAGE"
 
-#'
-#' @docType package
-#' @name CleanUpRNAseq
+## usethis namespace: start
+## usethis namespace: end
 globalVariables(
     c(
         "sample_name",
@@ -33,3 +23,4 @@ globalVariables(
         "group"
     )
 )
+

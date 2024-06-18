@@ -389,7 +389,7 @@ generate_seed_file <-
 #'
 #' @return A BSgenome package name
 #' @importFrom devtools check build install
-#' @importFrom BSgenome forgeBSgenomeDataPkg
+#' @importFrom BSgenomeForge forgeBSgenomeDataPkg
 #' @export
 #'
 #' @examples
@@ -446,7 +446,7 @@ forge_BSgenome <-
     }
 
     ## crate a BSgenome package from a seed file
-    forgeBSgenomeDataPkg(seed_file, destdir = dest_dir)
+    BSgenomeForge::forgeBSgenomeDataPkg(seed_file, destdir = dest_dir)
 
     ## check, build and install package
     ## OR install using command line

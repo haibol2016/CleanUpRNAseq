@@ -694,6 +694,8 @@ check_read_distribution <-
 #'
 #' @export
 #' @importFrom methods is
+#' @importFrom graphics smoothScatter
+#' @import KernSmooth
 #' @examples
 #' tmp_dir <- tempdir()
 #' options(timeout = max(3000, getOption("timeout")))
