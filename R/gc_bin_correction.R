@@ -455,7 +455,7 @@ gc_bin_contamination <- function(intergenic_counts,
 #'        "salmon_quant_summary.RData?download=1"
 #'    )
 #'    salmon_destfile <- file.path(tmp_dir, "salmon_quant_summary.RData")
-#'    retry_download{(download.file(url = salmon_url,
+#'    retry_download({download.file(url = salmon_url,
 #'                  destfile = salmon_destfile,
 #'                  mode = "wb")})
 #'
