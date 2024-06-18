@@ -9,8 +9,8 @@ retry_download(
   isError = function(x) {
      "try-error" \%in\% class(x)
  },
-  maxErrors = 10,
-  sleep = 5
+  maxErrors = 100,
+  sleep = 10
 )
 }
 \arguments{
@@ -36,7 +36,7 @@ StackOverflow with modification:
 https://stackoverflow.com/questions/63340463/download-files-until-it-works.
 }
 \examples{
-#' tmp_dir <- tempdir()
+tmp_dir <- tempdir()
 options(timeout = max(3000, getOption("timeout")))
 ## download feaureCounts results
 count_url <- paste0(

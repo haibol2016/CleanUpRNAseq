@@ -1360,7 +1360,7 @@ granges_to_saf <- function(granges) {
 #' @export
 #'
 #' @examples
-#' #' tmp_dir <- tempdir()
+#' tmp_dir <- tempdir()
 #' options(timeout = max(3000, getOption("timeout")))
 #' ## download feaureCounts results
 #' count_url <- paste0(
@@ -1375,7 +1375,7 @@ granges_to_saf <- function(granges) {
 
 retry_download <- function(expr,
                            isError = function(x) {"try-error" %in% class(x)},
-                           maxErrors = 10, sleep = 5) {
+                           maxErrors = 100, sleep = 10) {
     attempts <- 0
     retval <- try(eval(expr))
     while (isError(retval)) {
