@@ -262,8 +262,7 @@ get_saf <- function(ensdb_sqlite = NULL,
     intronic_saf <- granges_to_saf(intronic_GR)
     
     ## intergenic regions
-    strand(gene_GR) <- "*"
-    intergenic_GR <- setdiff(genome_GR, gene_GR)
+    intergenic_GR <- setdiff(genome_GR, gene_GR, ignore.strand = TRUE)
     intergenic_saf <- granges_to_saf(intergenic_GR)
 
     ## rRNA transcripts
